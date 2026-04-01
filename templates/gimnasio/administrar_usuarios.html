@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestionar Usuarios - Rehobotbox Gym</title>
+</head>
+<body>
+    <h1>Gestionar usuarios</h1>
+    <a href="{% url 'panel_admin' %}">Volver al panel</a>
+    <hr>
+    {% if usuarios %}
+<table border="1">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Documento</th>
+            <th>Estado</th>
+            <th>Fecha registro</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    {% for usuario in usuarios %}
+        <tr>
+            <td>{{ usuario.first_name }} {{ usuario.last_name }}</td>
+            <td>{{ usuario.email }}</td>
+            <td>{{ usuario.documento }}</td>
+            <td>{{ usuario.estado }}</td>
+            <td>{{ usuario.fecha_registro|date:"d/m/Y" }}</td>
+            <td>
+                <a href="{% url 'admin_cambiar_estado_usuario' usuario.id %}">
+                    {% if usuario.estado == 'activo' %}
+                        Suspender
+                    {% else %}
+                        Activar
+                    {% endif %}
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+    <p>No hay clientes registrados todavía.</p>
+{% endif %}
+
+</body>
+</html>
+</body>

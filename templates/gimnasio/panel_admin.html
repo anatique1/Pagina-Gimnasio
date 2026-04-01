@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel Admin - Rehobotbox Gym</title>
+</head>
+<body>
+    <h1>Bienvenida al panel de administración 💪</h1>
+    <p>Hola {{ request.user.first_name }}, aquí gestionas el gimnasio.</p>
+    <a href="{% url 'logout' %}">Cerrar sesión</a>
+    <hr>
+        <h2> Resumen </h2>
+        <p>Total clientes: {{ total_usuarios }}</p>
+        <p>Total planes: {{ total_planes }}</p>
+        <p>Membresías activas: {{ membresias_activas }}</p>
+    <hr>
+    <ul>
+        <h2> Gestion </h2>
+        <li><a href="{% url 'administrar_usurarios'}">  Gestion usuarios </a></li>
+        <li><a href="{% url 'administrar_planes'}">  Gestion planes </a></li>
+        <li><a href="{% url 'registrar_pagos'}">  Registrar pagos </a></li>
+        <li><a href="{% url 'administar_clase'}"> Administar claseS grupales </a></li>
+        <li><a href="{% url 'administrar_rutinas'}"> Administrar rutinas</a></li>
+    </ul>
+</body>
+</html> 

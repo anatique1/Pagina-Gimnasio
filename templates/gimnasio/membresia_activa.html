@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<head>
+    <html lang=" es">
+    <meta charset="UTF-8">
+    <title>
+        Membresía Activa - Rehobotbox Gym
+    </title>
+</head>
+<body>
+    <h1>Ya tienes una membresía activa </h1>
+    <p>Tu membresía vence el: {{ membresia.fecha_fin }}</p>
+    <p>Estado: {{ membresia.estado }}</p>
+    <a href="{% url 'inicio' %}">Volver al inicio</a>
+</body>

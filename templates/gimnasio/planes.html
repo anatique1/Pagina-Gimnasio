@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title> planes disponibles - Rehobotbox Gym</title>
+</head>
+<body>
+    <h1> Nuestros planes </h1>
+
+    {% if planes %}
+        {% for plan in planes %}
+            <div>
+                <h2>{{ plan.nombre_plan }}</h2>
+                <p>{{ plan.descripcion }}</p>
+                <p>Precio: ${{ plan.precio }}</p>
+                <p>Duración: {{ plan.duracion_dias }} días</p>
+                <a href="{% url 'comprar_plan' plan.id_plan %}">Comprar plan</a>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No hay planes disponibles por el momento.</p>
+    {% endif %}
+</body>
+</html>

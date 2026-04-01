@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<head>
+    <html lang=" es">
+    <meta charset="UTF-8">
+    <title>
+        comprar-plan - Rehobotbox Gym
+    </title>
+</head>
+<body>
+    <h1>
+        confirma y paga
+    </h1>
+    <div>
+        <h2>{{ plan.nombre_plan }}</h2>
+        <p>{{ plan.descripcion }}</p>
+        <p>Precio: ${{ plan.precio }}</p>
+        <p>Duración: {{ plan.duracion_dias }} días</p>
+    </div>
+    <a href="{% url 'pagar' plan.id_plan %}">
+        Pagar con Wompi
+    </a>
+
+    <a href="{% url 'planes' %}">Volver a planes</a>
+</body>
+</html>

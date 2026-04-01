@@ -1,0 +1,14 @@
+{% load socialaccount %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Inicio de sesion - Rehobotbox Gym</title>
+</head>
+<body>
+    <h1>Bienvenido a Rehobotbox Gym</h1>
+    <a href="{% provider_login_url 'google' %}">
+        Iniciar sesión con Google
+    </a>
+</body>
+</html>
