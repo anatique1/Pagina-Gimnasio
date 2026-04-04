@@ -1,14 +1,44 @@
 {% load socialaccount %}
+{% load static %}
+<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Inicio de sesion - Rehobotbox Gym</title>
+    <title>Rehobotbox Gym</title>
+    <link rel="stylesheet" href="{% static 'css/styleLogin.css' %}">
 </head>
+
+
 <body>
-    <h1>Bienvenido a Rehobotbox Gym</h1>
-    <a href="{% provider_login_url 'google' %}">
-        Iniciar sesión con Google
-    </a>
+    
+    <header>
+        <div class="logo">
+            <img src="{% static 'img/logo.png' %}">
+            <h1 class="gym-logo">REHOBOT BOX</h1>
+        </div>
+    </header>
+
+    <div class="login-container">
+        
+        <!-- CONTENIDO -->
+        <div class="content">
+            <h2 class="title">Bienvenido a</h2>
+            <h1 class="gym-name">REHOBOT BOX</h1>
+
+            <div class="buttons">
+
+                <!-- BOTÓN GOOGLE -->
+                <a href="{% provider_login_url 'google' %}" class="btn google">
+                    <span class="g-icon">G</span>
+                    Inicia sesión con Google
+                </a>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
 </body>
 </html>

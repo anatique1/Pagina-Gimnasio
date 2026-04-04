@@ -6,9 +6,19 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    <div class="intro">
-        <img src="{% static 'img/logo.png' %}" alt="Logo Rehobot Box" class="logo">
-        <h1 class="nombre">REHOBOT GYM</h1>
-    </div>
+
+<div class="intro">
+    <div class="glow-ring"></div>
+
+    <img src="{% static 'img/logo.png' %}" class="logo">
+    <h1 class="nombre">REHOBOTBOX GYM</h1>
+</div>
+
+<script>
+    setTimeout(() => {
+        window.location.href = "{% url 'login' %}";
+    }, 4000);
+</script>
+
 </body>
 </html>
