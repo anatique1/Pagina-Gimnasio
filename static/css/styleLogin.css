@@ -9,7 +9,7 @@ body {
     
     margin: 0;
     font-family: 'Poppins', sans-serif;
-    overflow: hidden;
+
    
     display: flex;
     flex-direction: column;
@@ -138,6 +138,440 @@ header {
         transform: scale(1.1);
     }
 }
+/* =============================================
+   REHOBOT BOX — stylePlanes.css
+   Estética: Dark Neon Gym
+   ============================================= */
 
+:root {
+    --bg-dark:        #05050f;
+    --bg-card:        #0d0d1f;
+    --bg-card-hover:  #111128;
+    --neon-pink:      #e91e8c;
+    --neon-cyan:      #00d4ff;
+    --neon-purple:    #7c3aed;
+    --text-primary:   #ffffff;
+    --text-muted:     #8888aa;
+    --border-subtle:  rgba(255,255,255,0.07);
+    --glow-pink:      0 0 30px rgba(233,30,140,0.35);
+    --glow-cyan:      0 0 30px rgba(0,212,255,0.35);
+    --radius:         18px;
+    --font-display:   'Bebas Neue', sans-serif;
+    --font-body:      'Poppins', sans-serif;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+}
+
+/* ── NAVBAR ─────────────────────────────────── */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 60px;
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(5,5,15,0.85);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-logo-img {
+    height: 36px;
+    filter: drop-shadow(0 0 8px var(--neon-pink));
+}
+
+.nav-brand {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    letter-spacing: 3px;
+    color: var(--text-primary);
+}
+
+.nav-links {
+    display: flex;
+    gap: 36px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--neon-cyan); }
+
+.nav-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.btn-outline {
+    text-decoration: none;
+    padding: 8px 22px;
+    border-radius: 50px;
+    border: 1.5px solid var(--text-muted);
+    color: var(--text-primary);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: border-color 0.2s, color 0.2s;
+}
+.btn-outline:hover {
+    border-color: var(--neon-cyan);
+    color: var(--neon-cyan);
+}
+
+.btn-solid {
+    text-decoration: none;
+    padding: 8px 22px;
+    border-radius: 50px;
+    background: var(--neon-pink);
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    transition: box-shadow 0.2s, transform 0.15s;
+}
+.btn-solid:hover {
+    box-shadow: var(--glow-pink);
+    transform: translateY(-1px);
+}
+
+/* ── HERO ────────────────────────────────────── */
+.hero {
+    position: relative;
+    min-height: 55vh;
+    display: flex;
+    align-items: flex-end;
+    padding: 0 60px 60px;
+    background:
+        url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1600&q=80')
+        center/cover no-repeat;
+    margin-top: 73px; /* navbar height */
+    overflow: hidden;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        135deg,
+        rgba(5,5,15,0.92) 0%,
+        rgba(124,58,237,0.25) 50%,
+        rgba(5,5,15,0.75) 100%
+    );
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    animation: fadeUp 0.8s ease both;
+}
+
+.hero-eyebrow {
+    font-size: 0.85rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--neon-cyan);
+    margin-bottom: 10px;
+}
+
+.hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    line-height: 0.95;
+    letter-spacing: 2px;
+    color: var(--text-primary);
+    text-shadow: 0 0 40px rgba(233,30,140,0.3);
+}
+
+.hero-highlight {
+    color: var(--neon-pink);
+    text-shadow: 0 0 60px rgba(233,30,140,0.6);
+}
+
+/* ── PLANES SECTION ──────────────────────────── */
+.planes-section {
+    padding: 90px 60px;
+    background:
+        radial-gradient(ellipse at 20% 0%, rgba(124,58,237,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 100%, rgba(0,212,255,0.08) 0%, transparent 60%),
+        var(--bg-dark);
+}
+
+.planes-header {
+    text-align: center;
+    margin-bottom: 60px;
+    animation: fadeUp 0.7s ease both;
+}
+
+.planes-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    letter-spacing: 3px;
+    color: var(--text-primary);
+}
+
+.planes-title span {
+    color: var(--neon-pink);
+    text-shadow: 0 0 30px rgba(233,30,140,0.5);
+}
+
+.planes-subtitle {
+    margin-top: 10px;
+    color: var(--text-muted);
+    font-size: 1rem;
+    letter-spacing: 1px;
+}
+
+/* ── GRID DE TARJETAS ────────────────────────── */
+.planes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    max-width: 1100px;
+    margin: 0 auto;
+    align-items: start;
+}
+
+/* ── TARJETA BASE ────────────────────────────── */
+.plan-card {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 38px 32px 36px;
+    border: 1px solid var(--border-subtle);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: fadeUp 0.8s ease both;
+}
+
+.plan-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.plan-card:hover {
+    transform: translateY(-8px);
+    background: var(--bg-card-hover);
+}
+
+/* Colores por plan */
+.card-dia::before       { background: linear-gradient(90deg, var(--neon-cyan), #0099cc); }
+.card-quincena::before  { background: linear-gradient(90deg, var(--neon-pink), var(--neon-purple)); }
+.card-mensual::before   { background: linear-gradient(90deg, var(--neon-purple), var(--neon-pink)); }
+
+.card-dia:hover       { box-shadow: var(--glow-cyan); }
+.card-quincena:hover  { box-shadow: var(--glow-pink); }
+.card-mensual:hover   { box-shadow: 0 0 30px rgba(124,58,237,0.4); }
+
+/* Tarjeta destacada */
+.plan-card.featured {
+    border-color: rgba(233,30,140,0.35);
+    background: linear-gradient(160deg, #130d24, #0d0d1f);
+    transform: scale(1.04);
+    box-shadow: var(--glow-pink);
+}
+
+.plan-card.featured:hover {
+    transform: scale(1.04) translateY(-8px);
+}
+
+/* ── BADGE ───────────────────────────────────── */
+.plan-badge {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 50px;
+    background: rgba(255,255,255,0.06);
+    color: var(--text-muted);
+    margin-bottom: 18px;
+    border: 1px solid var(--border-subtle);
+}
+
+.plan-badge.popular {
+    background: rgba(233,30,140,0.15);
+    color: var(--neon-pink);
+    border-color: rgba(233,30,140,0.3);
+}
+
+/* ── ÍCONO ───────────────────────────────────── */
+.plan-icon {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+}
+
+/* ── NOMBRE DEL PLAN ─────────────────────────── */
+.plan-name {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    letter-spacing: 4px;
+    color: var(--text-primary);
+    margin-bottom: 18px;
+}
+
+/* ── PRECIO ──────────────────────────────────── */
+.plan-price {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    margin-bottom: 28px;
+}
+
+.price-currency {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    color: var(--text-muted);
+}
+
+.price-amount {
+    font-family: var(--font-display);
+    font-size: 3.2rem;
+    line-height: 1;
+    color: var(--text-primary);
+    letter-spacing: 1px;
+}
+
+.card-dia     .price-amount { color: var(--neon-cyan); }
+.card-quincena .price-amount { color: var(--neon-pink); }
+.card-mensual .price-amount { color: #c084fc; }
+
+.price-period {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-left: 4px;
+}
+
+/* ── FEATURES ────────────────────────────────── */
+.plan-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 32px;
+    min-height: 80px;
+}
+
+.plan-features li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+.check {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(233,30,140,0.15);
+    color: var(--neon-pink);
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    margin-top: 1px;
+}
+
+.card-dia .check {
+    background: rgba(0,212,255,0.12);
+    color: var(--neon-cyan);
+}
+
+/* ── BOTÓN CTA ───────────────────────────────── */
+.btn-plan {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    padding: 14px 24px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: transform 0.2s, box-shadow 0.2s;
+    background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(233,30,140,0.25);
+}
+
+.card-dia .btn-plan {
+    background: linear-gradient(135deg, var(--neon-cyan), #0077aa);
+    box-shadow: 0 4px 20px rgba(0,212,255,0.2);
+}
+
+.btn-plan:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 30px rgba(233,30,140,0.45);
+}
+
+.card-dia .btn-plan:hover {
+    box-shadow: 0 8px 30px rgba(0,212,255,0.4);
+}
+
+/* ── ANIMACIONES ─────────────────────────────── */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.plan-card:nth-child(1) { animation-delay: 0.1s; }
+.plan-card:nth-child(2) { animation-delay: 0.25s; }
+.plan-card:nth-child(3) { animation-delay: 0.4s; }
+
+/* ── RESPONSIVE ──────────────────────────────── */
+@media (max-width: 900px) {
+    .navbar       { padding: 16px 24px; }
+    .hero         { padding: 0 24px 48px; margin-top: 65px; }
+    .planes-section { padding: 60px 24px; }
+    .planes-grid  {
+        grid-template-columns: 1fr;
+        max-width: 440px;
+    }
+    .plan-card.featured { transform: scale(1); }
+    .plan-card.featured:hover { transform: translateY(-8px); }
+    .nav-links    { display: none; }
+}
+
+@media (max-width: 480px) {
+    .nav-actions .btn-outline { display: none; }
+    .price-amount { font-size: 2.6rem; }
+}
 
 
