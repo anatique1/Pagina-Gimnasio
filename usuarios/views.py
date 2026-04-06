@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from gimnasio.models import Plan
 from django.contrib.auth.decorators import login_required
 
 def login_view(request):
@@ -7,7 +8,9 @@ def login_view(request):
             return redirect('panel_admin')
         else:
             return redirect('inicio')
-    return render(request, 'usuarios/login.html')
+
+    planes = Plan.objects.all()
+    return render(request, 'usuarios/login.html', {'planes': planes})
 
 @login_required
 def logout_view(request):

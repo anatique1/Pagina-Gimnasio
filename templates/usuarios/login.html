@@ -18,27 +18,29 @@
         </div>
     </header>
 
-    <div class="login-container">
-        
-        <!-- CONTENIDO -->
-        <div class="content">
-            <h2 class="title">Bienvenido a</h2>
-            <h1 class="gym-name">REHOBOT BOX</h1>
+    <div class="main-container">
+        <div class="login-container">
 
-            <div class="buttons">
+            <!-- CONTENIDO -->
+            <div class="content">
+                <h2 class="title">Bienvenido a</h2>
+                <h1 class="gym-name">REHOBOT BOX</h1>
 
-                <!-- BOTÓN GOOGLE -->
-                <a href="{% provider_login_url 'google' %}" class="btn google">
-                    <span class="g-icon">G</span>
-                    Inicia sesión con Google
-                </a>
+                <div class="buttons">
+
+                    <!-- BOTÓN GOOGLE -->
+                    <a href="{% provider_login_url 'google' %}" class="btn google">
+                        <span class="g-icon">G</span>
+                        Inicia sesión con Google
+                    </a>
+
+                </div>
+
 
             </div>
 
-
         </div>
-
-    </div>
+        </div>
 <!-- HERO -->
     <section class="hero">
         <div class="hero-overlay"></div>
@@ -53,84 +55,53 @@
 
     <!-- PLANES -->
     <section class="planes-section" id="planes">
-        <div class="planes-header">
-            <h2 class="planes-title">Elige tu <span>Plan</span></h2>
-            <p class="planes-subtitle">Sin excusas. Sin límites. Solo resultados.</p>
-        </div>
+    <div class="planes-header">
+        <h2 class="planes-title">Elige tu <span>Plan</span></h2>
+        <p class="planes-subtitle">Sin excusas. Sin límites. Solo resultados.</p>
+    </div>
 
-        <div class="planes-grid">
+    <div class="planes-grid">
 
-            <!-- PLAN DÍA -->
-            <div class="plan-card card-dia">
-                <div class="plan-badge">Acceso Rápido</div>
-                <div class="plan-icon">⚡</div>
-                <h3 class="plan-name">DÍA</h3>
-                <div class="plan-price">
-                    <span class="price-currency">$</span>
-                    <span class="price-amount">8.000</span>
-                    <span class="price-period">/ 1 día</span>
-                </div>
-                <ul class="plan-features">
-                    <li>
-                        <span class="check">✓</span>
-                        Acceso por un día a nuestras instalaciones
-                    </li>
-                </ul>
-                <a href="#" class="btn-plan">COMENZAR AHORA</a>
+        {% for plan in planes %}
+        <div class="plan-card
+            {% if plan.duracion_dias == 1 %}card-dia
+            {% elif plan.duracion_dias <= 15 %}card-quincena featured
+            {% else %}card-mensual{% endif %}">
+
+            <div class="plan-badge
+                {% if plan.duracion_dias <= 15 and plan.duracion_dias > 1 %}popular{% endif %}">
+                {% if plan.duracion_dias == 1 %}Acceso Rápido
+                {% elif plan.duracion_dias <= 15 %}Más Popular
+                {% else %}Mejor Valor{% endif %}
             </div>
 
-            <!-- PLAN QUINCENA (destacado) -->
-            <div class="plan-card card-quincena featured">
-                <div class="plan-badge popular">Más Popular</div>
-                <div class="plan-icon">🔥</div>
-                <h3 class="plan-name">QUINCENA</h3>
-                <div class="plan-price">
-                    <span class="price-currency">$</span>
-                    <span class="price-amount">45.000</span>
-                    <span class="price-period">/ 15 días</span>
-                </div>
-                <ul class="plan-features">
-                    <li>
-                        <span class="check">✓</span>
-                        Ingreso ilimitado a nuestras instalaciones
-                    </li>
-                    <li>
-                        <span class="check">✓</span>
-                        Asesoría básica de entrenamiento
-                    </li>
-                </ul>
-                <a href="#" class="btn-plan">COMENZAR AHORA</a>
+            <h3 class="plan-name">{{ plan.nombre_plan }}</h3>
+
+            <div class="plan-price">
+                <span class="price-currency">$</span>
+                <span class="price-amount">{{ plan.precio }}</span>
+                <span class="price-period">/ {{ plan.duracion_dias }} día{% if plan.duracion_dias > 1 %}s{% endif %}</span>
             </div>
 
-            <!-- PLAN MENSUAL -->
-            <div class="plan-card card-mensual">
-                <div class="plan-badge">Mejor Valor</div>
-                <div class="plan-icon">👑</div>
-                <h3 class="plan-name">MENSUALIDAD</h3>
-                <div class="plan-price">
-                    <span class="price-currency">$</span>
-                    <span class="price-amount">65.000</span>
-                    <span class="price-period">/ mes</span>
-                </div>
-                <ul class="plan-features">
-                    <li>
-                        <span class="check">✓</span>
-                        Acceso exclusivo a nuestra página
-                    </li>
-                    <li>
-                        <span class="check">✓</span>
-                        Toma periódica de medidas corporales
-                    </li>
-                    <li>
-                        <span class="check">✓</span>
-                        Ingreso ilimitado a nuestras instalaciones
-                    </li>
-                </ul>
-                <a href="#" class="btn-plan">COMENZAR AHORA</a>
-            </div>
+            <ul class="plan-features">
+                <li>
+                    <span class="check">✓</span>
+                    {{ plan.descripcion }}
+                </li>
+            </ul>
+
+            <!-- Pasa el id_plan a la URL -->
+            <a href="{% url 'comprar_plan' id_plan=plan.id_plan %}" class="btn-plan">
+                COMENZAR AHORA
+            </a>
 
         </div>
-    </section>
+        {% empty %}
+            <p>No hay planes disponibles por el momento.</p>
+        {% endfor %}
+
+    </div>
+</section>
 
 </body>
 </html>
