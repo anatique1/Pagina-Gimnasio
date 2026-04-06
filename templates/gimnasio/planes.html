@@ -1,24 +1,61 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <title> planes disponibles - Rehobotbox Gym</title>
+    <link rel="stylesheet" href="{% static 'css/styleLogin.css' %}">
 </head>
 <body>
-    <h1> Nuestros planes </h1>
+    <a href="{% url 'inicio' %}" class="btn-outline">← Volver</a>
+     <!-- PLANES -->
+    <section class="planes-section" id="planes">
+    <div class="planes-header">
+        <h2 class="planes-title">Elige tu <span>Plan</span></h2>
+        <p class="planes-subtitle">Sin excusas. Sin límites. Solo resultados.</p>
+    </div>
 
-    {% if planes %}
+    <div class="planes-grid">
+
         {% for plan in planes %}
-            <div>
-                <h2>{{ plan.nombre_plan }}</h2>
-                <p>{{ plan.descripcion }}</p>
-                <p>Precio: ${{ plan.precio }}</p>
-                <p>Duración: {{ plan.duracion_dias }} días</p>
-                <a href="{% url 'comprar_plan' plan.id_plan %}">Comprar plan</a>
+        <div class="plan-card
+            {% if plan.duracion_dias == 1 %}card-dia
+            {% elif plan.duracion_dias <= 15 %}card-quincena featured
+            {% else %}card-mensual{% endif %}">
+
+            <div class="plan-badge
+                {% if plan.duracion_dias <= 15 and plan.duracion_dias > 1 %}popular{% endif %}">
+                {% if plan.duracion_dias == 1 %}Acceso Rápido
+                {% elif plan.duracion_dias <= 15 %}Más Popular
+                {% else %}Mejor Valor{% endif %}
             </div>
+
+            <h3 class="plan-name">{{ plan.nombre_plan }}</h3>
+
+            <div class="plan-price">
+                <span class="price-currency">$</span>
+                <span class="price-amount">{{ plan.precio }}</span>
+                <span class="price-period">/ {{ plan.duracion_dias }} día{% if plan.duracion_dias > 1 %}s{% endif %}</span>
+            </div>
+
+            <ul class="plan-features">
+                <li>
+                    <span class="check">✓</span>
+                    {{ plan.descripcion }}
+                </li>
+            </ul>
+
+            <!-- Pasa el id_plan a la URL -->
+            <a href="{% url 'comprar_plan' id_plan=plan.id_plan %}" class="btn-plan">
+                COMENZAR AHORA
+            </a>
+
+        </div>
+        {% empty %}
+            <p>No hay planes disponibles por el momento.</p>
         {% endfor %}
-    {% else %}
-        <p>No hay planes disponibles por el momento.</p>
-    {% endif %}
+
+    </div>
+</section>
 </body>
 </html>

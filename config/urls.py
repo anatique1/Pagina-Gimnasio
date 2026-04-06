@@ -25,6 +25,7 @@ urlpatterns = [
     path('', include('gimnasio.urls')),      
     path('usuarios/', include('usuarios.urls')), 
     path('rutinas/', include('rutinas.urls')),
+
       
     
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

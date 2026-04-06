@@ -142,7 +142,7 @@ AUTHENTICATION_BACKENDS = [
 
 SITE_ID = 1
 
-LOGIN_REDIRECT_URL = '/usuarios/redirigir/'
+LOGIN_REDIRECT_URL = '/gimnasio/planes/'
 LOGOUT_REDIRECT_URL = '/'
 ACCOUNT_LOGOUT_ON_GET = True
 
@@ -154,9 +154,11 @@ SOCIALACCOUNT_PROVIDERS = {
         ],
         'AUTH_PARAMS': {
             'access_type': 'online',
+            'prompt':'select_account',
         }
     }
 }
 LOGIN_URL = '/usuarios/login/'
 ACCOUNT_LOGIN_METHODS = {'email'}
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+SOCIALACCOUNT_LOGIN_ON_GET = True

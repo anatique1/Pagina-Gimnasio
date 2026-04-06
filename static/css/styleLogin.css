@@ -1,154 +1,13 @@
-
-/* RESET */
-body {
-    background-image: url(../img/fondo_login.jpg); /* 10, 13 */
-    background-repeat: no-repeat;   /* Evita la repetición [5] */
-    background-size: cover;         /* Ajusta la imagen al tamaño [3] */
-    background-position: center;    /* Centra la imagen [1] */
-    background-attachment: fixed;   /* Mantiene el fondo fijo al hacer scroll [3] */
-    
-    margin: 0;
-    font-family: 'Poppins', sans-serif;
-
-   
-    display: flex;
-    flex-direction: column;
-
-    min-height: 100vh;
-}
-
-/* RESET */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-
-/* HEADER */
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 5%;
-    header {
-    flex-shrink: 0;
-}
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.logo img {
-    height: 40px;
-}
-
-.gym-logo {
-    color: white;
-    font-size: 18px;
-}
-
-/* CONTENEDOR LOGIN */
-
-.main-container{
-    min-height: 90vh;
-    display: flex;
-    align-items: center;
-}
-.login-container {
-
-    width: 90%;
-    max-width: 350px;
-    margin: auto;
-    padding: 30px;
-
-    border-radius: 20px;
-    background: rgba(255,255,255,0.08);
-    backdrop-filter: blur(15px);
-
-    border: 1px solid rgba(255,255,255,0.2);
-    box-shadow: 0 0 40px rgba(0, 123, 255, 0.3);
-
-    color: white;
-    text-align: center;
-
-    animation: loginEnter 0.8s ease-out;
-}
-
-/* TEXTO */
-.title {
-    font-size: clamp(14px, 3vw, 18px);
-}
-
-.gym-name {
-    font-size: clamp(22px, 5vw, 30px);
-    margin-bottom: 20px;
-}
-
-/* BOTONES */
-.buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-/* BOTÓN GENERAL */
-.btn {
-    width: 100%;
-    padding: 12px;
-    border-radius: 10px;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 16px;
-    transition: 0.3s;
-}
-
-/* BOTÓN GOOGLE */
-.google {
-    background: linear-gradient(45deg, #ff6600, #007bff);
-    color: white;
-    box-shadow: 0 0 15px rgba(0,123,255,0.5);
-}
-
-.google:hover {
-    transform: scale(1.07);
-    box-shadow: 0 0 25px rgba(255,102,0,0.7);
-}
-
-/* ICONO */
-.g-icon {
-    margin-right: 8px;
-}
-
-/* ANIMACIONES */
-
-@keyframes loginEnter {
-    from {
-        opacity: 0;
-        transform: scale(0.8) translateY(40px);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-    }
-}
-
-@keyframes zoomBg {
-    from {
-        transform: scale(1);
-    }
-    to {
-        transform: scale(1.1);
-    }
-}
 /* =============================================
-   REHOBOT BOX — stylePlanes.css
-   Estética: Dark Neon Gym
+   REHOBOT BOX — styleLogin.css
+   Orden correcto: variables → reset → base → componentes
    ============================================= */
 
+
+/* ── 1. VARIABLES ────────────────────────────
+   Se definen primero para que todo el archivo
+   pueda usarlas con var(--nombre)
+─────────────────────────────────────────────── */
 :root {
     --bg-dark:        #05050f;
     --bg-card:        #0d0d1f;
@@ -166,109 +25,183 @@ header {
     --font-body:      'Poppins', sans-serif;
 }
 
+
+/* ── 2. RESET ────────────────────────────────
+   Siempre va antes que todo lo demás.
+   Elimina márgenes y paddings por defecto
+   del navegador para que no interfieran.
+─────────────────────────────────────────────── */
 *, *::before, *::after {
-    box-sizing: border-box;
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
-html { scroll-behavior: smooth; }
+html {
+    scroll-behavior: smooth;
+}
 
+
+/* ── 3. BODY ─────────────────────────────────
+   Un solo body unificado. Antes tenías dos
+   definiciones que se pisaban entre sí.
+─────────────────────────────────────────────── */
 body {
-    background-color: var(--bg-dark);
+    background-image: url(../img/fondo_login.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-color: var(--bg-dark); /* color de respaldo si la imagen no carga */
+
     color: var(--text-primary);
     font-family: var(--font-body);
+
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
     overflow-x: hidden;
 }
 
-/* ── NAVBAR ─────────────────────────────────── */
-.navbar {
+
+/* ── 4. HEADER ───────────────────────────────
+   justify-content: space-between separa el
+   logo (izquierda) del botón (derecha)
+   automáticamente sin hacer nada extra.
+─────────────────────────────────────────────── */
+header {
     display: flex;
+    justify-content: space-between;  /* logo izq, botón der */
     align-items: center;
-    justify-content: space-between;
-    padding: 18px 60px;
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    background: rgba(5,5,15,0.85);
-    backdrop-filter: blur(14px);
-    border-bottom: 1px solid var(--border-subtle);
+    padding: 15px 5%;
+    flex-shrink: 0;
 }
 
-.nav-logo {
+.logo {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-.nav-logo-img {
-    height: 36px;
-    filter: drop-shadow(0 0 8px var(--neon-pink));
+.logo img {
+    height: 40px;
 }
 
-.nav-brand {
-    font-family: var(--font-display);
-    font-size: 1.4rem;
-    letter-spacing: 3px;
-    color: var(--text-primary);
-}
-
-.nav-links {
-    display: flex;
-    gap: 36px;
-}
-
-.nav-links a {
-    text-decoration: none;
-    color: var(--text-muted);
-    font-size: 0.875rem;
+.gym-logo {
+    color: white;
+    font-size: 18px;
     font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    transition: color 0.2s;
 }
 
-.nav-links a:hover { color: var(--neon-cyan); }
 
-.nav-actions {
+/* ── 5. BOTÓN GOOGLE (header) ────────────────
+   white-space: nowrap evita que el texto
+   "INICIAR SESIÓN" se parta en dos líneas.
+   color: #fff porque antes era #000 (negro)
+   sobre fondo rosa, difícil de leer.
+─────────────────────────────────────────────── */
+.btn-header-google {
     display: flex;
-    gap: 12px;
-    align-items: center;
-}
-
-.btn-outline {
-    text-decoration: none;
-    padding: 8px 22px;
+    margin-left: auto;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 10px 24px;
     border-radius: 50px;
-    border: 1.5px solid var(--text-muted);
-    color: var(--text-primary);
-    font-size: 0.8rem;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    transition: border-color 0.2s, color 0.2s;
-}
-.btn-outline:hover {
-    border-color: var(--neon-cyan);
-    color: var(--neon-cyan);
-}
-
-.btn-solid {
     text-decoration: none;
-    padding: 8px 22px;
-    border-radius: 50px;
-    background: var(--neon-pink);
-    color: #fff;
-    font-size: 0.8rem;
+    font-size: 13px;
     font-weight: 700;
-    letter-spacing: 0.5px;
-    transition: box-shadow 0.2s, transform 0.15s;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #fff;
+    background: var(--neon-pink);
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: 0.3s;
 }
-.btn-solid:hover {
-    box-shadow: var(--glow-pink);
+
+.btn-header-google:hover {
+    background: #ff3da0;
+    box-shadow: 0 0 20px rgba(233, 30, 140, 0.5);
     transform: translateY(-1px);
 }
 
-/* ── HERO ────────────────────────────────────── */
+
+/* ── 6. CONTENEDOR LOGIN ─────────────────────
+   main-container centra verticalmente la
+   tarjeta en el espacio disponible.
+─────────────────────────────────────────────── */
+.main-container {
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+}
+
+.login-container {
+    width: 90%;
+    max-width: 350px;
+    margin: auto;
+    padding: 30px;
+
+    border-radius: 20px;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 0 40px rgba(0, 123, 255, 0.3);
+
+    color: white;
+    text-align: center;
+
+    animation: loginEnter 0.8s ease-out;
+}
+
+.title {
+    font-size: clamp(14px, 3vw, 18px);
+}
+
+.gym-name {
+    font-size: clamp(22px, 5vw, 30px);
+    margin-bottom: 20px;
+}
+
+/* ── HERO LOGIN ──────────────────────────────
+   Ocupa toda la pantalla con la imagen de fondo
+   del body, y muestra el nombre centrado.
+─────────────────────────────────────────────── */
+.hero-login {
+    position: relative;
+    height: 100vh;          /* toda la pantalla */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.hero-login-overlay {
+    position: absolute;
+    inset: 0;
+    /* oscurece un poco la imagen para que el texto se lea bien */
+    background: rgba(5, 5, 15, 0.55);
+}
+
+.hero-login-content {
+    position: relative;
+    z-index: 2;             /* encima del overlay */
+}
+.hero-login-title {
+    font-size:32px;
+}
+.hero-login-name {
+    font-family: var(--font-display);   /* Bebas Neue, la misma del hero */
+    font-size: 80px; /* grande en desktop, se adapta en móvil */
+    letter-spacing: 8px;
+    color: var(--text-primary);
+    text-shadow:
+        0 0 60px rgba(233, 30, 140, 0.4),   /* brillo pink */
+        0 0 120px rgba(233, 30, 140, 0.2);  /* halo más suave */
+}
+
+/* ── 7. HERO ─────────────────────────────────*/
 .hero {
     position: relative;
     min-height: 55vh;
@@ -278,7 +211,6 @@ body {
     background:
         url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1600&q=80')
         center/cover no-repeat;
-    margin-top: 73px; /* navbar height */
     overflow: hidden;
 }
 
@@ -321,7 +253,8 @@ body {
     text-shadow: 0 0 60px rgba(233,30,140,0.6);
 }
 
-/* ── PLANES SECTION ──────────────────────────── */
+
+/* ── 8. PLANES ───────────────────────────────*/
 .planes-section {
     padding: 90px 60px;
     background:
@@ -355,7 +288,6 @@ body {
     letter-spacing: 1px;
 }
 
-/* ── GRID DE TARJETAS ────────────────────────── */
 .planes-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -365,7 +297,6 @@ body {
     align-items: start;
 }
 
-/* ── TARJETA BASE ────────────────────────────── */
 .plan-card {
     background: var(--bg-card);
     border-radius: var(--radius);
@@ -390,16 +321,14 @@ body {
     background: var(--bg-card-hover);
 }
 
-/* Colores por plan */
 .card-dia::before       { background: linear-gradient(90deg, var(--neon-cyan), #0099cc); }
 .card-quincena::before  { background: linear-gradient(90deg, var(--neon-pink), var(--neon-purple)); }
 .card-mensual::before   { background: linear-gradient(90deg, var(--neon-purple), var(--neon-pink)); }
 
-.card-dia:hover       { box-shadow: var(--glow-cyan); }
-.card-quincena:hover  { box-shadow: var(--glow-pink); }
-.card-mensual:hover   { box-shadow: 0 0 30px rgba(124,58,237,0.4); }
+.card-dia:hover         { box-shadow: var(--glow-cyan); }
+.card-quincena:hover    { box-shadow: var(--glow-pink); }
+.card-mensual:hover     { box-shadow: 0 0 30px rgba(124,58,237,0.4); }
 
-/* Tarjeta destacada */
 .plan-card.featured {
     border-color: rgba(233,30,140,0.35);
     background: linear-gradient(160deg, #130d24, #0d0d1f);
@@ -411,7 +340,6 @@ body {
     transform: scale(1.04) translateY(-8px);
 }
 
-/* ── BADGE ───────────────────────────────────── */
 .plan-badge {
     display: inline-block;
     font-size: 0.68rem;
@@ -432,13 +360,6 @@ body {
     border-color: rgba(233,30,140,0.3);
 }
 
-/* ── ÍCONO ───────────────────────────────────── */
-.plan-icon {
-    font-size: 1.8rem;
-    margin-bottom: 10px;
-}
-
-/* ── NOMBRE DEL PLAN ─────────────────────────── */
 .plan-name {
     font-family: var(--font-display);
     font-size: 2rem;
@@ -447,7 +368,6 @@ body {
     margin-bottom: 18px;
 }
 
-/* ── PRECIO ──────────────────────────────────── */
 .plan-price {
     display: flex;
     align-items: baseline;
@@ -469,9 +389,9 @@ body {
     letter-spacing: 1px;
 }
 
-.card-dia     .price-amount { color: var(--neon-cyan); }
+.card-dia      .price-amount { color: var(--neon-cyan); }
 .card-quincena .price-amount { color: var(--neon-pink); }
-.card-mensual .price-amount { color: #c084fc; }
+.card-mensual  .price-amount { color: #c084fc; }
 
 .price-period {
     font-size: 0.8rem;
@@ -481,7 +401,6 @@ body {
     margin-left: 4px;
 }
 
-/* ── FEATURES ────────────────────────────────── */
 .plan-features {
     list-style: none;
     display: flex;
@@ -520,7 +439,6 @@ body {
     color: var(--neon-cyan);
 }
 
-/* ── BOTÓN CTA ───────────────────────────────── */
 .btn-plan {
     display: block;
     text-align: center;
@@ -551,7 +469,19 @@ body {
     box-shadow: 0 8px 30px rgba(0,212,255,0.4);
 }
 
-/* ── ANIMACIONES ─────────────────────────────── */
+
+/* ── 9. ANIMACIONES ──────────────────────────*/
+@keyframes loginEnter {
+    from {
+        opacity: 0;
+        transform: scale(0.8) translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
 @keyframes fadeUp {
     from { opacity: 0; transform: translateY(28px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -561,23 +491,17 @@ body {
 .plan-card:nth-child(2) { animation-delay: 0.25s; }
 .plan-card:nth-child(3) { animation-delay: 0.4s; }
 
-/* ── RESPONSIVE ──────────────────────────────── */
+
+/* ── 10. RESPONSIVE ──────────────────────────*/
 @media (max-width: 900px) {
-    .navbar       { padding: 16px 24px; }
-    .hero         { padding: 0 24px 48px; margin-top: 65px; }
+    .hero           { padding: 0 24px 48px; }
     .planes-section { padding: 60px 24px; }
-    .planes-grid  {
-        grid-template-columns: 1fr;
-        max-width: 440px;
-    }
-    .plan-card.featured { transform: scale(1); }
+    .planes-grid    { grid-template-columns: 1fr; max-width: 440px; }
+    .plan-card.featured       { transform: scale(1); }
     .plan-card.featured:hover { transform: translateY(-8px); }
-    .nav-links    { display: none; }
 }
 
 @media (max-width: 480px) {
-    .nav-actions .btn-outline { display: none; }
     .price-amount { font-size: 2.6rem; }
+    .btn-header-google span { display: none; } /* oculta la G en móvil si queda apretado */
 }
-
-
