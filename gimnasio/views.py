@@ -3,7 +3,10 @@ from django.contrib.auth.decorators import login_required
 from .models import Plan,Membresia
 from usuarios.models import Usuario
 from django.shortcuts import get_object_or_404
-
+#rest framework
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .serializers import PlanSerializer
 def inicio(request):
     return render(request, 'gimnasio/inicio.html')
 
@@ -19,7 +22,7 @@ def comprar_plan(request, id_plan):
     membresia_activa=Membresia.objects.filter(
         id_usuario=request.user,
         estado='activa'
-    ).first
+    ).first()
     if membresia_activa:
         return render(request, 'gimnasio/membresia_activa.html', {
             'membresia': membresia_activa
@@ -106,3 +109,19 @@ def eliminarPlan(request, id_plan):
     plan = get_object_or_404(Plan,id_plan=id_plan )
     plan.delete()
     return redirect('admin_planes')
+# ========================
+# API REST - PLANES
+# ========================
+
+@api_view(['GET'])
+def api_planes(request):
+    planes = Plan.objects.all()
+    serializer = PlanSerializer(planes, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def api_plan_detalle(request, id_plan):
+    plan = get_object_or_404(Plan, id_plan=id_plan)
+    serializer = PlanSerializer(plan)
+    return Response(serializer.data)
