@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views import api_planes, api_plan_detalle
 
 urlpatterns = [
     path('', views.inicio, name='inicio'),
@@ -13,5 +14,6 @@ urlpatterns = [
     path('panel_admin/planes/', views.administrar_planes, name='administrar_planes'),
     path('panel_admin/planes/crear/', views.crear_planes, name='crear_planes'), 
     path('panel_admin/planes/<int:id_plan>/eliminar/', views.eliminarPlan, name='eliminarPlan'),
-
+    path('api/planes/', api_planes),
+    path('api/planes/<int:id_plan>/', api_plan_detalle),
 ]
