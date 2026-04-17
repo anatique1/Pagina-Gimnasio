@@ -46,9 +46,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
-    # Rest
-    'rest_framework',
+    'allauth.socialaccount.providers.google'
 ]
 
 MIDDLEWARE = [
@@ -119,6 +117,7 @@ LANGUAGE_CODE = 'es-co'
 
 TIME_ZONE = 'America/Bogota'
 
+USE_THOUSAND_SEPARATOR = True
 USE_I18N = True
 
 USE_TZ = True

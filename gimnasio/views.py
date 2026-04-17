@@ -109,13 +109,3 @@ def eliminarPlan(request, id_plan):
     plan = get_object_or_404(Plan,id_plan=id_plan )
     plan.delete()
     return redirect('admin_planes')
-# ========================
-# API REST - PLANES
-# ========================
-
-@api_view(['GET'])
-def api_planes(request):
-    planes = Plan.objects.all()
-    serializer = PlanSerializer(planes, many=True)
-    return Response(serializer.data)
-

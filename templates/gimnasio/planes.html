@@ -1,4 +1,5 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -17,7 +18,7 @@
 
     <div class="planes-grid">
 
-        {% for plan in planes %}
+   {% for plan in planes %}
         <div class="plan-card
             {% if plan.duracion_dias == 1 %}card-dia
             {% elif plan.duracion_dias <= 15 %}card-quincena featured
@@ -56,6 +57,5 @@
         {% endfor %}
 
     </div>
-</section>
 </body>
 </html>
