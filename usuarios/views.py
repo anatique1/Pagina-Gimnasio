@@ -7,7 +7,7 @@ def login_view(request):
         if request.user.es_admin():
             return redirect('panel_admin')
         else:
-            return redirect('inicio')
+            return redirect('inicio')  
 
     planes = Plan.objects.all()
     return render(request, 'usuarios/login.html', {'planes': planes})

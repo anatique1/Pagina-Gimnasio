@@ -1,0 +1,278 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+  padding: 0;
+}
+
+:root {
+    --accent:     #c84bff;
+    --bg-deep:    #0d0d0f;
+    --bg-card2:   #1e1e23;
+    --bg-card:    #161619;
+    --accent2:    #9b35cc;
+    --accent-dim: rgba(200,75,255,0.12);
+    --text:       #f0eef5;
+    --text-muted: #8e8a99;
+    --border:     rgba(255,255,255,0.07);
+    --radius-sm:  8px;
+    --radius-md:  14px;
+    --radius-lg:  20px;
+    --neon-pink:      #e91e8c;
+    --neon-cyan:      #00d4ff;
+    --neon-purple:    #7c3aed;
+}
+
+/* ── BASE ── */
+body {
+    background: var(--bg-deep);
+    color: var(--text);
+    font-family : 'Poppins', sans-serif;
+    font-size: 15px;
+    min-height: 100vh;
+    padding-bottom: 80px;
+}
+header {
+    display: flex;
+    justify-content: space-between;  /* logo izq, botón der */
+    align-items: center;
+    padding: 15px 5%;
+    flex-shrink: 0;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo img {
+    height: 40px;
+}
+
+.gym-logo {
+    color: white;
+    font-size: 18px;
+    /* ── negrilla ── */
+    font-weight: 600;
+}
+
+
+.usuario {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--bg-card2);
+    border: 2px solid var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--accent);
+}
+
+/* ── MAIN CONTENT ── */
+.container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.saludo {
+    padding: 28px 0 8px;
+}
+
+.saludo h1 {
+    font-size: 32px;
+    
+    font-weight: 900;
+}
+
+.saludo h1 span {
+    color: var(--accent);
+}
+
+.saludo p {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+/* ── SECTION LABELS ── */
+.section-label {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 28px 0 12px;
+}
+
+/* ── RUTINA DEL DÍA CARD ── */
+.rutina-dia-container {
+    position: relative;
+    box-shadow: var(--glow-cyan); 
+    background: linear-gradient(135deg, var(--accent-dim) 0%, var(--bg-card2) 60%);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    overflow: hidden;
+}
+/* ── línea superior rutina del día ── */
+.rutina-dia-container::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--neon-cyan));
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.rutina-dia-inner {
+    padding: 22px 20px 20px;
+}
+
+/* ── para que sea botonsito ── */
+.rutina-dia-hoy {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid var(--accent);
+    background-color: var(--bg-card2);
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+}
+
+
+.rutina-dia-title {
+    font-size: 28px;
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: 0.5px;
+    text-transform: capitalize;
+    margin-bottom: 8px;
+}
+
+.rutina-dia-caractersticas {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.rutina-dia-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 20px;
+    margin-bottom: 20px;
+    line-height: 1.5;
+    text-transform: capitalize;
+}
+
+/* ── TAGS ── */
+.etiqueta {
+    background: var(--bg-card2);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 12px;
+    text-transform: capitalize;
+    color: var(--text-muted);
+}
+
+
+/* ── BUTTONS ── */
+.btnEmpezar {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent2);
+    color: var(--text);
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 11px 22px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: capitalize;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+/* ── para que cambie de color cuando se pasa el mouse por encima ── */
+.btnEmpezar:hover {
+    background: var(--accent2);
+}
+
+
+/* ── RUTINA VACÍA ── */
+.rutina-vacia{
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+
+/* ── MIS RUTINAS GRID ── */
+.rutinas-personalizadas-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+}
+
+.rutina-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 16px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.15s;
+}
+
+.rutina-card:hover {
+    border-color: rgba(200,75,255,0.35);
+    transform: translateY(-2px);
+}
+
+.rutina-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.rutina-card:hover::after {
+    opacity: 1;
+}
+
+.rutina-card-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    line-height: 1.2;
+    text-transform: uppercase;
+    color: var(--text);
+}
+
+.rutina-card-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.4;
+    flex: 1;
+}
+

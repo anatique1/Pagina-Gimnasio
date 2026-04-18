@@ -6,17 +6,27 @@ class Ejercicio(models.Model):
     nombreEjercicio=models.CharField(max_length=100)
     descripcion = models.TextField()
     def __str__(self):
-        return self.nombre
+        return self.nombreEjercicio
 class Rutina(models.Model):
     TIPO_RUTINA = [
         ('predeterminada','Predeterminada'),
         ('personal','Personal'),
         ]
+    TIPO_ENTRENAMIENTO = [
+        ('crossfit',    'CrossFit'),
+        ('fuerza',      'Fuerza'),
+        ('cardio',      'Cardio'),
+        ('funcional',   'Funcional'),
+        ('hipertrofia', 'Hipertrofia'),
+        ('flexibilidad','Flexibilidad'),
+    ]
     id_rutina = models.AutoField(primary_key=True)
     id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='rutinas')
     nombre_rutina = models.CharField(max_length=100)
-    descripcion = models.TextField()
+    descripcion = models.TextField(max_length=500)
     tipo_rutina = models.CharField(max_length=20, choices=TIPO_RUTINA, default='personal')
+    tipo_entrenamiento = models.CharField(max_length=20, choices=TIPO_ENTRENAMIENTO, default='funcional')
+    duracion = models.IntegerField(default=45, help_text='Duración en minutos')
     fecha_creacion = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

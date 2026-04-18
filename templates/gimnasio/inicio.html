@@ -1,24 +1,85 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Rehobotbox Gym</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rehobot Box</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/inicio.css' %}">  
 </head>
 <body>
 
-<div class="intro">
-    <div class="glow-ring"></div>
+  <!-- TOPBAR -->
+  <header>
+    <div class="logo">
+      <img src="{% static 'img/logo.png' %}">
+      <h1 class="gym-logo">REHOBOT BOX</h1>
+    </div>
+    <div class="usuario">{{ user.get_short_name|default:"U"|slice:":1"|upper }}</div>
+    </header>
+ 
 
-    <img src="{% static 'img/logo.png' %}" class="logo">
-    <h1 class="nombre">REHOBOTBOX GYM</h1>
-</div>
+  <!-- MAIN -->
+  <main class="container">
 
-<script>
-    setTimeout(() => {
-        window.location.href = "{% url 'login' %}";
-    }, 4000);
-</script>
+    <!-- SALUDO -->
+    <div class="saludo">
+       <!-- el span es para dividir el texto y tenga 2 estilos distintos -->
+      <h1>¡Hola, <span>{{ user.first_name|default:"Atleta" }}</span>!</h1>
+      <p>¿Qué rutina vas a conquistar hoy?</p>
+    </div>
+
+    <!-- RUTINA DEL DÍA -->
+    <p class="section-label">Rutina del Día</p>
+
+    <!-- creamos un if para mostrar la rutina del día y si no hay pues le decimos que no hay -->
+    {% if rutina %}
+    <div class="rutina-dia-container">
+      <div class="rutina-dia-inner">
+        <div class="rutina-dia-hoy">Hoy</div>
+        <div class="rutina-dia-title">{{ rutina.nombre_rutina|upper }}</div>
+        <div class="rutina-dia-caracteristicas">
+          <span class="etiqueta">{{ rutina.tipo_entrenamiento }}</span>
+          <span class="etiqueta">{{ rutina.duracion }} min</span>
+        </div>
+        <p class="rutina-dia-desc">{{ rutina.descripcion }}</p>
+        <!-- despues colocar el enlace para que se muestre la rutina -->
+        <a href="#" class="btnEmpezar">
+          Empezar rutina
+        </a>
+      </div>
+    </div>
+    {% else %}
+        <div class="rutina-vacia">
+          <p>No hay rutina del día disponible</p>
+        </div>
+    {% endif %}
+
+    <!-- RUTINAS PERSONALIZADAS -->
+    <p class="section-label">Mis Rutinas Personalizadas</p>
+
+    {% if rutinas %}
+    <div class="rutinas-personalizadas-container">
+      {% for r in rutinas %}
+      <div class="rutina-card">
+        <div class="rutina-card-name">{{ r.nombre_rutina }}</div>
+        <div class="rutina-card-desc">{{ r.descripcion|truncatechars:60 }}</div>
+        <a href="#" class="btn-small">Entrenar</a>
+      </div>
+      {% endfor %}
+       <!-- despues colocar el enlace para crear las rutinas -->
+        <a href="#" class="btnEmpezar">
+          crear rutinas
+        </a>
+    </div>
+    {% else %}
+    <div class="rutina-vacia">
+      <p>No tienes rutinas aún.<br>¡Crea tu primera rutina!</p>
+    </div>
+    {% endif %}
+
+  </main>
 
 </body>
 </html>

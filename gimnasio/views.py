@@ -3,12 +3,10 @@ from django.contrib.auth.decorators import login_required
 from .models import Plan,Membresia
 from usuarios.models import Usuario
 from django.shortcuts import get_object_or_404
-#rest framework
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from .serializers import PlanSerializer
-def inicio(request):
-    return render(request, 'gimnasio/inicio.html')
+from rutinas.models import Rutina
+
+def intro(request):
+    return render(request, 'gimnasio/intro.html')
 
 def sobreNosotros(request):
     return render(request, 'gimnasio/sobreNosotros.html')
@@ -16,6 +14,33 @@ def sobreNosotros(request):
 def planes(request):
     mostrar_todos_planes= Plan.objects.all()
     return render(request, 'gimnasio/planes.html',{'planes':mostrar_todos_planes})
+
+#home
+@login_required
+def inicio(request):
+
+    membresia_activa = Membresia.objects.filter(
+        id_usuario=request.user,
+        estado='activa'
+    ).first()
+
+    if not membresia_activa:
+        return redirect('planes')
+
+    # Rutina del día (admin)
+    predeterminada = Rutina.objects.filter(
+        tipo_rutina='predeterminada'
+    ).order_by('-fecha_creacion').first()
+
+    # Rutinas del usuario
+    rutinasUsuario = Rutina.objects.filter(
+        id_usuario=request.user,
+        tipo_rutina='personal'
+    )
+
+    return render(request, 'gimnasio/inicio.html', {'rutina': predeterminada,'rutinas': rutinasUsuario})
+
+
 #COMPRAR EL PLAN
 def comprar_plan(request, id_plan):
     plan = get_object_or_404(Plan, id_plan=id_plan)
@@ -109,3 +134,4 @@ def eliminarPlan(request, id_plan):
     plan = get_object_or_404(Plan,id_plan=id_plan )
     plan.delete()
     return redirect('admin_planes')
+
