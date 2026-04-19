@@ -1,278 +1,467 @@
-*, *::before, *::after {
-    box-sizing: border-box;
-    margin: 0;
-  padding: 0;
-}
+/* ─── RESET & ROOT ─────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+
+ /* colores predeterminados */
 :root {
-    --accent:     #c84bff;
-    --bg-deep:    #0d0d0f;
-    --bg-card2:   #1e1e23;
-    --bg-card:    #161619;
-    --accent2:    #9b35cc;
-    --accent-dim: rgba(200,75,255,0.12);
-    --text:       #f0eef5;
-    --text-muted: #8e8a99;
-    --border:     rgba(255,255,255,0.07);
-    --radius-sm:  8px;
-    --radius-md:  14px;
-    --radius-lg:  20px;
-    --neon-pink:      #e91e8c;
-    --neon-cyan:      #00d4ff;
-    --neon-purple:    #7c3aed;
+  --bg-dark:        #05050f;
+  --bg-card:        #0d0d1f;
+  --bg-card-hover:  #111128;
+  --neon-pink:      #e91e8c;
+  --neon-cyan:      #00d4ff;
+  --neon-purple:    #7c3aed;
+  --text-primary:   #ffffff;
+  --text-muted:     #8888aa;
+  --border-subtle:  rgba(255,255,255,0.07);
+  --glow-pink:      0 0 30px rgba(233,30,140,0.35);
+  --glow-cyan:      0 0 30px rgba(0,212,255,0.35);
+  --radius:         18px;
+  --font-body:      'Poppins', sans-serif;
+
+  /* aliases internos */
+  --radius-lg:  24px;
+  --shadow:     0 8px 32px rgba(0,0,0,.6);
+  --transition: .35s cubic-bezier(.4,0,.2,1);
 }
 
-/* ── BASE ── */
+
 body {
-    background: var(--bg-deep);
-    color: var(--text);
-    font-family : 'Poppins', sans-serif;
-    font-size: 15px;
-    min-height: 100vh;
-    padding-bottom: 80px;
-}
-header {
-    display: flex;
-    justify-content: space-between;  /* logo izq, botón der */
-    align-items: center;
-    padding: 15px 5%;
-    flex-shrink: 0;
+  font-family: var(--font-body);
+  background: var(--bg-dark);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
 }
 
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+a { text-decoration: none; color: inherit; }
+
+/* ─── barra lateral ──────────────────────────────────────── */
+
+/* ─── oculta la barra lateral ──────────────── */
+#sidebar-toggle { display: none; }
+
+/* ─── oculta la pantalla cuando se abre la barra ──────────────────────────────────────── */
+.overlay {
+  position: fixed; inset: 0; z-index: 90;
+  background: rgba(5,5,15,.7);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition);
+}
+#sidebar-toggle:checked ~ .overlay {
+  opacity: 1;
+  pointer-events: all;/* ─ pone el cursor con la manito abierta ─ */
+
 }
 
-.logo img {
+/* ─── barra lateral ──────────────────────────────────────── */
+.sidebar {
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  width: 280px;
+  z-index: 100; /* ─── para que este encima de todo(capas) ─ */
+  background: var(--bg-card);
+  border-right: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  padding: 32px 20px 28px;
+  transform: translateX(-100%);
+  transition: transform var(--transition);
+  overflow: hidden;
+}
+
+/* cuando se abre la barra muestra una linea bonita al lado */
+.sidebar::after {
+  content: '';
+  position: absolute; top: 0; right: 0; bottom: 0; width: 1px;
+  background: linear-gradient(to bottom, transparent, var(--neon-cyan), transparent);
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+#sidebar-toggle:checked ~ .sidebar        { transform: translateX(0); }
+#sidebar-toggle:checked ~ .sidebar::after { opacity: 1; }
+
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+.logo-mark img {
+    display: block;
     height: 40px;
 }
-
-.gym-logo {
-    color: white;
-    font-size: 18px;
-    /* ── negrilla ── */
-    font-weight: 600;
-}
-
-
-.usuario {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: var(--bg-card2);
-    border: 2px solid var(--accent);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.logo-text {
+    font-family: var(--font-body);
+    font-size: 26px;
     font-weight: 700;
-    font-size: 14px;
-    color: var(--accent);
+    letter-spacing: 2px;
+    background: linear-gradient(to right, var(--neon-cyan), var(--neon-pink));
+    /* para que se vea la letra con colores degradados */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
-/* ── MAIN CONTENT ── */
-.container {
-    max-width: 480px;
-    margin: 0 auto;
-    padding: 0 20px;
+/* las cosas dentro de la barra lateral */
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+/* cada boton dentro de la barra lateral menos inicio */
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 16px;
+  border-radius: 12px;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--text-muted);
+  /* transicion caundo se pase el mause por encima*/
+  transition: background var(--transition), color var(--transition), transform .2s;
+
+}
+.nav-link:hover {
+  background: var(--bg-card-hover);
+  color: var(--text-primary);
+  transform: translateX(4px);
+}
+/* el apartado de inicio que va a ser azul por que ya estamos en inicio */
+.nav-link.active {
+  background: linear-gradient(90deg, rgba(0,212,255,.15), rgba(0,212,255,.04));
+  color: var(--neon-cyan);
+  border-left: 3px solid var(--neon-cyan);
 }
 
-.saludo {
-    padding: 28px 0 8px;
+.nav-link .nav-icon {
+  font-size: 17px;
+  flex-shrink: 0;
+  width: 22px;
+  text-align: center;
 }
 
-.saludo h1 {
-    font-size: 32px;
-    
-    font-weight: 900;
-}
+.nav-link.logout {
+     color: var(--neon-pink);
+     }
 
-.saludo h1 span {
-    color: var(--accent);
+/* ─── TOPBAR ───────────────────────────────────────── */
+.topbar {
+  position: fixed;
+  top: 0; left: 0; right: 0; z-index: 80;
+  height: 64px;
+  background: rgba(5,5,15,.88);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 16px;
 }
-
-.saludo p {
-    color: var(--text-muted);
-    font-size: 14px;
-    margin-top: 4px;
+/* boton que abre la barra lateral */
+.menu-btn {
+  width: 42px; height: 42px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: background var(--transition);
+  flex-shrink: 0;
 }
-
-/* ── SECTION LABELS ── */
-.section-label {
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 2.5px;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin: 28px 0 12px;
-}
-
-/* ── RUTINA DEL DÍA CARD ── */
-.rutina-dia-container {
-    position: relative;
-    box-shadow: var(--glow-cyan); 
-    background: linear-gradient(135deg, var(--accent-dim) 0%, var(--bg-card2) 60%);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--border);
-    overflow: hidden;
-}
-/* ── línea superior rutina del día ── */
-.rutina-dia-container::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--accent), var(--neon-cyan));
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-}
-
-.rutina-dia-inner {
-    padding: 22px 20px 20px;
-}
-
-/* ── para que sea botonsito ── */
-.rutina-dia-hoy {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    border: 1px solid var(--accent);
-    background-color: var(--bg-card2);
-    border-radius: 999px;
-    padding: 4px 12px;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 14px;
+.menu-btn:hover { background: var(--bg-card-hover); }
+.menu-btn span {
+  display: block;
+  width: 20px; height: 2px;
+  background: var(--text-primary);
+  border-radius: 2px;
+  transition: transform var(--transition), opacity var(--transition), width var(--transition);
 }
 
 
-.rutina-dia-title {
-    font-size: 28px;
-    font-weight: 900;
-    line-height: 1.1;
-    letter-spacing: 0.5px;
-    text-transform: capitalize;
-    margin-bottom: 8px;
+.topbar-title {
+  font-family: var(--font-body);
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  background: linear-gradient(to right, var(--neon-cyan), var(--neon-pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.rutina-dia-caractersticas {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
+/* ─── MAIN ─────────────────────────────────────────── */
+.main {
+  position: relative; z-index: 1;
+  padding: 84px 20px 100px;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
-.rutina-dia-desc {
-    font-size: 13px;
-    color: var(--text-muted);
-    margin-top: 20px;
-    margin-bottom: 20px;
-    line-height: 1.5;
-    text-transform: capitalize;
+/* ─── GREETING ─────────────────────────────────────── */
+.greeting {
+  margin-bottom: 36px;
+  animation: fadeUp .6s ease both;
+}
+.greeting-sup {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--neon-cyan);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.greeting-name {
+  font-family: var(--font-body);
+  font-size: clamp(38px, 8vw, 64px);
+  line-height: 1;
+  letter-spacing: 2px;
+}
+.greeting-name .highlight {
+  background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.greeting-sub {
+  margin-top: 10px;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 300;
 }
 
-/* ── TAGS ── */
+/* ─── SECTION HEADER ───────────────────────────────── */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.section-title {
+  font-family: var(--font-body);
+  font-size: 22px;
+  letter-spacing: 1.5px;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+
+/* ─── RUTINA DEL DÍA ───────────────────────────────── */
+.rutina-dia-wrap {
+  margin-bottom: 40px;
+  animation: fadeUp .6s .15s ease both;
+}
+
+.rutina-dia-card {
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  background: linear-gradient(135deg, #0d0d1f 0%, #08081a 70%, #05050f 100%);
+  border: 1px solid rgba(0,212,255,.15);
+  box-shadow: var(--shadow), var(--glow-cyan);
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.rutina-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0,212,255,.1);
+  border: 1px solid rgba(0,212,255,.3);
+  color: var(--neon-cyan);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 14px;
+}
+
+.rutina-nombre {
+  font-family: var(--font-body);
+  font-size: clamp(30px, 6vw, 46px);
+  letter-spacing: 2px;
+  line-height: 1.05;
+  margin-bottom: 10px;
+  position: relative; z-index: 1;
+}
+
+.rutina-desc {
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.6;
+  margin-bottom: 24px;
+  max-width: 480px;
+  position: relative; z-index: 1;
+}
+
+.rutina-caracteristicas {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  position: relative; z-index: 1;
+  flex-wrap: wrap;
+}
 .etiqueta {
-    background: var(--bg-card2);
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    padding: 4px 10px;
-    font-size: 12px;
-    text-transform: capitalize;
-    color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-primary);
 }
 
-
-/* ── BUTTONS ── */
-.btnEmpezar {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--accent2);
-    color: var(--text);
-    border: none;
-    border-radius: var(--radius-sm);
-    padding: 11px 22px;
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: capitalize;
-    cursor: pointer;
-    text-decoration: none;
-    transition: background 0.2s;
+/* cuando no hay rutina del día o no hay rutinas en general */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 48px 20px;
+  border-radius: var(--radius-lg);
+  border: 2px dashed var(--border-subtle);
+  background: var(--bg-card);
 }
-/* ── para que cambie de color cuando se pasa el mouse por encima ── */
-.btnEmpezar:hover {
-    background: var(--accent2);
+.empty-icon  { font-size: 48px; margin-bottom: 14px; opacity: .5; }
+.empty-title {
+  font-family: var(--font-body);
+  font-size: 22px;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  color: var(--text-muted);
 }
+.empty-sub { font-size: 13px; color: var(--text-muted); opacity: .7; }
 
-
-/* ── RUTINA VACÍA ── */
-.rutina-vacia{
-    text-align: center;
-    padding: 40px 20px;
-    color: var(--text-muted);
-    font-size: 14px;
+/* ─── MIS RUTINAS ──────────────────────────────────── */
+.rutinas-wrap {
+  margin-bottom: 40px;
+  animation: fadeUp .6s .3s ease both;
 }
 
-
-/* ── MIS RUTINAS GRID ── */
-.rutinas-personalizadas-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 12px;
+.rutinas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
 }
 
 .rutina-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 16px 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    position: relative;
-    overflow: hidden;
-    transition: border-color 0.2s, transform 0.15s;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition), background var(--transition);
+  cursor: pointer;
 }
-
 .rutina-card:hover {
-    border-color: rgba(200,75,255,0.35);
-    transform: translateY(-2px);
+  background: var(--bg-card-hover);
+  transform: translateY(-4px);
+  border-color: rgba(0,212,255,.25);
+  box-shadow: var(--glow-cyan);
 }
 
-.rutina-card::after {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, var(--accent), transparent);
-    opacity: 0;
-    transition: opacity 0.2s;
+/* franja superior por card */
+.rutina-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  border-radius: var(--radius) var(--radius) 0 0;
 }
+.rutina-card:nth-child(1)::before { background: linear-gradient(90deg, var(--neon-pink),   var(--neon-cyan)); }
+.rutina-card:nth-child(2)::before { background: linear-gradient(90deg, var(--neon-cyan),   var(--neon-purple)); }
+.rutina-card:nth-child(3)::before { background: linear-gradient(90deg, var(--neon-purple), var(--neon-pink)); }
+.rutina-card:nth-child(4)::before { background: linear-gradient(90deg, var(--neon-cyan),   var(--neon-pink)); }
 
-.rutina-card:hover::after {
-    opacity: 1;
-}
-
-.rutina-card-name {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: 0.3px;
-    line-height: 1.2;
-    text-transform: uppercase;
-    color: var(--text);
+.rutina-card-nombre {
+  font-family: var(--font-body);
+  font-size: 20px;
+  letter-spacing: 1px;
+  line-height: 1.1;
 }
 
 .rutina-card-desc {
-    font-size: 12px;
-    color: var(--text-muted);
-    line-height: 1.4;
-    flex: 1;
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
+.btn-empezar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: rgba(0,212,255,.08);
+  border: 1px solid rgba(0,212,255,.2);
+  color: var(--neon-cyan);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 9px 16px;
+  border-radius: 10px;
+  transition: background var(--transition), border-color var(--transition), box-shadow var(--transition), transform .2s;
+  width: 100%;
+  letter-spacing: .3px;
+}
+/* ─── FAB ──────────────────────────────────────────── */
+.fab {
+  position: fixed;
+  bottom: 28px; right: 24px;
+  z-index: 70;
+  width: 58px; height: 58px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--neon-pink), var(--neon-cyan));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px;
+  color: #fff;
+  box-shadow: var(--glow-pink);
+  animation: fabPulse 2.5s infinite;
+  transition: transform .25s, box-shadow .25s;
+}
+.fab:hover {
+  box-shadow: var(--glow-cyan);
+  animation: none;
+}
+
+/* ─── ANIMACIONES ──────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fabPulse {
+  0%   { box-shadow: var(--glow-pink), 0 0 0 0   rgba(233,30,140,.4); }
+  70%  { box-shadow: var(--glow-pink), 0 0 0 16px rgba(233,30,140,0); }
+  100% { box-shadow: var(--glow-pink), 0 0 0 0   rgba(233,30,140,0); }
+}
+
+/* ─── RESPONSIVE ───────────────────────────────────── */
+@media (max-width: 600px) {
+  .rutinas-grid { grid-template-columns: 1fr 1fr; }
+  .rutina-meta  { flex-wrap: wrap; }
+  .main         { padding: 78px 16px 100px; }
+}
+@media (max-width: 400px) {
+  .rutinas-grid { grid-template-columns: 1fr; }
+}

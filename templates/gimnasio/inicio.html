@@ -2,82 +2,131 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rehobot Box</title>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/inicio.css' %}">  
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GymApp | Inicio</title>
+   <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+   <link rel="stylesheet" href="{% static 'css/inicio.css' %}">
 </head>
 <body>
 
-  <!-- TOPBAR -->
-  <header>
-    <div class="logo">
-      <img src="{% static 'img/logo.png' %}">
-      <h1 class="gym-logo">REHOBOT BOX</h1>
-    </div>
-    <div class="usuario">{{ user.get_short_name|default:"U"|slice:":1"|upper }}</div>
-    </header>
+  <!-- ─── menu lateral ─────────────────── -->
  
+  <!-- ─── controla el menu cuando esta abierto o cerrado─────────────────── -->
+  <input type="checkbox" id="sidebar-toggle">
 
-  <!-- MAIN -->
-  <main class="container">
+  <!-- ─── cierra el menu con click en cualquier lado de la pantalla ──────── -->
+  <label for="sidebar-toggle" class="overlay"></label>
 
-    <!-- SALUDO -->
-    <div class="saludo">
-       <!-- el span es para dividir el texto y tenga 2 estilos distintos -->
-      <h1>¡Hola, <span>{{ user.first_name|default:"Atleta" }}</span>!</h1>
-      <p>¿Qué rutina vas a conquistar hoy?</p>
+    <nav class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">
+        <img src="{% static 'img/logo.png' %}">
+      </div>
+      <span class="logo-text">REHOBOT BOX</span>
     </div>
+
+    <div class="sidebar-nav">
+      <a href="#" class="nav-link active">
+        <span class="nav-icon">
+          <i class="fa-solid fa-house"></i>
+        </span> Inicio
+      </a>
+      <a href="#" class="nav-link">
+        <span class="nav-icon">
+          <i class="fa-solid fa-dumbbell"></i>
+        </span> Mis Rutinas
+      </a>
+      <a href="#" class="nav-link">
+        <span class="nav-icon">
+          <i class="fa-solid fa-bolt"></i>
+        </span> Planes
+      </a>
+
+
+      <a href="#" class="nav-link logout">
+        <span class="nav-icon">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </span> Cerrar Sesión
+      </a>
+    </div>
+  </nav>
+
+  <!-- ─── barra superior ─────────────────────────── -->
+  <header class="topbar">
+
+    <label for="sidebar-toggle" class="menu-btn" aria-label="Menú">
+      <span></span>
+      <span></span>
+      <span></span>
+    </label>
+    <span class="topbar-title">REHOBOT BOX</span>
+  </header>
+
+  <!-- ─── MAIN ──────────────────────────── -->
+  <main class="main">
+
+    <!-- GREETING -->
+    <section class="greeting">
+      <p class="greeting-sup">● Bienvenido de vuelta</p>
+      <h1 class="greeting-name">
+        Hola, <span class="highlight">{{ user.first_name |default:"Atleta"}}</span>!
+      </h1>
+      <p class="greeting-sub">¿Qué rutina vas a conquistar hoy?</p>
+    </section>
 
     <!-- RUTINA DEL DÍA -->
-    <p class="section-label">Rutina del Día</p>
-
-    <!-- creamos un if para mostrar la rutina del día y si no hay pues le decimos que no hay -->
-    {% if rutina %}
-    <div class="rutina-dia-container">
-      <div class="rutina-dia-inner">
-        <div class="rutina-dia-hoy">Hoy</div>
-        <div class="rutina-dia-title">{{ rutina.nombre_rutina|upper }}</div>
-        <div class="rutina-dia-caracteristicas">
-          <span class="etiqueta">{{ rutina.tipo_entrenamiento }}</span>
-          <span class="etiqueta">{{ rutina.duracion }} min</span>
-        </div>
-        <p class="rutina-dia-desc">{{ rutina.descripcion }}</p>
-        <!-- despues colocar el enlace para que se muestre la rutina -->
-        <a href="#" class="btnEmpezar">
-          Empezar rutina
-        </a>
+    <section class="rutina-dia-wrap">
+      <div class="section-header">
+        <h2 class="section-title">Rutina del Día</h2>
       </div>
-    </div>
-    {% else %}
-        <div class="rutina-vacia">
-          <p>No hay rutina del día disponible</p>
+
+      {% if rutina %}
+        <div class="rutina-dia-card">
+          <div class="rutina-badge">HOY</div>
+          <h3 class="rutina-nombre">{{ rutina.nombre_rutina }}</h3>
+          <p class="rutina-desc">{{ rutina.descripcion }}</p>
+          <div class="rutina-caracteristicas">
+            <span class="etiqueta">{{ rutina.tipo_entrenamiento }}</span>
+            <span class="etiqueta">{{ rutina.duracion }} min</span>
+          </div>
+          <a href="#" class="btn-empezar">▶ Entrenar</a>
         </div>
-    {% endif %}
+      {% else %}
+        <div class="empty-state">
+          <p class="empty-title">Sin rutina asignada</p>
+          <p class="empty-sub">No tienes una rutina para hoy.<br>¡Crea una o contacta a tu entrenador!</p>
+        </div>
+      {% endif %}
+    </section>
 
-    <!-- RUTINAS PERSONALIZADAS -->
-    <p class="section-label">Mis Rutinas Personalizadas</p>
-
-    {% if rutinas %}
-    <div class="rutinas-personalizadas-container">
-      {% for r in rutinas %}
-      <div class="rutina-card">
-        <div class="rutina-card-name">{{ r.nombre_rutina }}</div>
-        <div class="rutina-card-desc">{{ r.descripcion|truncatechars:60 }}</div>
-        <a href="#" class="btn-small">Entrenar</a>
+    <!-- MIS RUTINAS -->
+    <section class="rutinas-wrap">
+      <div class="section-header">
+        <h2 class="section-title">Mis Rutinas</h2>
+         <!-- ─── boton + ───────────────────────────── -->
+        <a href="#" class="fab" title="Nueva rutina">+</a>
+        <a href="#" class="section-link">Ver todas →</a>
       </div>
-      {% endfor %}
-       <!-- despues colocar el enlace para crear las rutinas -->
-        <a href="#" class="btnEmpezar">
-          crear rutinas
-        </a>
-    </div>
-    {% else %}
-    <div class="rutina-vacia">
-      <p>No tienes rutinas aún.<br>¡Crea tu primera rutina!</p>
-    </div>
-    {% endif %}
+
+      {% if rutinas %}
+        <div class="rutinas-grid">
+              <!-- no se muestran mas de 4 rutinas -->
+          {% for r in rutinas|slice:":4" %}
+            <div class="rutina-card">
+              <p class="rutina-card-nombre">{{ r.nombre_rutina }}</p>
+              <p class="rutina-card-desc">{{ r.descripcion }}</p>
+              <a href="#" class="btn-empezar">▶ Entrenar</a>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="empty-state">
+          <p>No tienes rutinas aún.</p>
+            </div>
+      {% endif %}
+    </section>
 
   </main>
 
