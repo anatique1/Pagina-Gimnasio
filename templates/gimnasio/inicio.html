@@ -5,57 +5,43 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>GymApp | Inicio</title>
-   <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-   <link rel="stylesheet" href="{% static 'css/inicio.css' %}">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'css/inicio.css' %}">
 </head>
 <body>
 
-  <!-- ─── menu lateral ─────────────────── -->
- 
-  <!-- ─── controla el menu cuando esta abierto o cerrado─────────────────── -->
   <input type="checkbox" id="sidebar-toggle">
-
-  <!-- ─── cierra el menu con click en cualquier lado de la pantalla ──────── -->
   <label for="sidebar-toggle" class="overlay"></label>
 
-    <nav class="sidebar">
+  <nav class="sidebar">
     <div class="sidebar-logo">
       <div class="logo-mark">
         <img src="{% static 'img/logo.png' %}">
       </div>
       <span class="logo-text">REHOBOT BOX</span>
     </div>
-
     <div class="sidebar-nav">
-      <a href="#" class="nav-link active">
-        <span class="nav-icon">
-          <i class="fa-solid fa-house"></i>
-        </span> Inicio
+      <a href="{% url 'inicio' %}" class="nav-link active">
+        <span class="nav-icon"><i class="fa-solid fa-house"></i></span>
+        Inicio
       </a>
-      <a href="#" class="nav-link">
-        <span class="nav-icon">
-          <i class="fa-solid fa-dumbbell"></i>
-        </span> Mis Rutinas
+      <a href="{% url 'lista_rutinas' %}" class="nav-link">
+        <span class="nav-icon"><i class="fa-solid fa-dumbbell"></i></span>
+        Mis Rutinas
       </a>
-      <a href="#" class="nav-link">
-        <span class="nav-icon">
-          <i class="fa-solid fa-bolt"></i>
-        </span> Planes
+      <a href="{% url 'planes' %}" class="nav-link">
+        <span class="nav-icon"><i class="fa-solid fa-bolt"></i></span>
+        Planes
       </a>
-
-
-      <a href="#" class="nav-link logout">
-        <span class="nav-icon">
-          <i class="fa-solid fa-right-from-bracket"></i>
-        </span> Cerrar Sesión
+      <a href="{% url 'logout' %}" class="nav-link logout">
+        <span class="nav-icon"><i class="fa-solid fa-right-from-bracket"></i></span>
+        Cerrar Sesión
       </a>
     </div>
   </nav>
 
-  <!-- ─── barra superior ─────────────────────────── -->
   <header class="topbar">
-
     <label for="sidebar-toggle" class="menu-btn" aria-label="Menú">
       <span></span>
       <span></span>
@@ -64,24 +50,20 @@
     <span class="topbar-title">REHOBOT BOX</span>
   </header>
 
-  <!-- ─── MAIN ──────────────────────────── -->
   <main class="main">
 
-    <!-- GREETING -->
     <section class="greeting">
       <p class="greeting-sup">● Bienvenido de vuelta</p>
       <h1 class="greeting-name">
-        Hola, <span class="highlight">{{ user.first_name |default:"Atleta"}}</span>!
+        Hola, <span class="highlight">{{ user.first_name|default:"Atleta" }}</span>!
       </h1>
       <p class="greeting-sub">¿Qué rutina vas a conquistar hoy?</p>
     </section>
 
-    <!-- RUTINA DEL DÍA -->
     <section class="rutina-dia-wrap">
       <div class="section-header">
         <h2 class="section-title">Rutina del Día</h2>
       </div>
-
       {% if rutina %}
         <div class="rutina-dia-card">
           <div class="rutina-badge">HOY</div>
@@ -91,7 +73,7 @@
             <span class="etiqueta">{{ rutina.tipo_entrenamiento }}</span>
             <span class="etiqueta">{{ rutina.duracion }} min</span>
           </div>
-          <a href="#" class="btn-empezar">▶ Entrenar</a>
+          <a href="{% url 'detalle_rutina' rutina.pk %}" class="btn-empezar">▶ Entrenar</a>
         </div>
       {% else %}
         <div class="empty-state">
@@ -101,34 +83,29 @@
       {% endif %}
     </section>
 
-    <!-- MIS RUTINAS -->
     <section class="rutinas-wrap">
       <div class="section-header">
         <h2 class="section-title">Mis Rutinas</h2>
-         <!-- ─── boton + ───────────────────────────── -->
-        <a href="#" class="fab" title="Nueva rutina">+</a>
-        <a href="#" class="section-link">Ver todas →</a>
+        <a href="{% url 'crear_rutina' %}" class="fab" title="Nueva rutina">+</a>
+        <a href="{% url 'lista_rutinas' %}" class="section-link">Ver todas →</a>
       </div>
-
       {% if rutinas %}
         <div class="rutinas-grid">
-              <!-- no se muestran mas de 4 rutinas -->
           {% for r in rutinas|slice:":4" %}
             <div class="rutina-card">
               <p class="rutina-card-nombre">{{ r.nombre_rutina }}</p>
               <p class="rutina-card-desc">{{ r.descripcion }}</p>
-              <a href="#" class="btn-empezar">▶ Entrenar</a>
+              <a href="{% url 'detalle_rutina' r.pk %}" class="btn-empezar">▶ Entrenar</a>
             </div>
           {% endfor %}
         </div>
       {% else %}
         <div class="empty-state">
           <p>No tienes rutinas aún.</p>
-            </div>
+        </div>
       {% endif %}
     </section>
 
   </main>
-
 </body>
 </html>

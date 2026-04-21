@@ -1,0 +1,109 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ rutina.nombre_rutina }} — Rehobotbox Gym</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'css/rutinas.css' %}">
+</head>
+<body>
+
+  <input type="checkbox" id="sidebar-toggle">
+  <label for="sidebar-toggle" class="overlay"></label>
+
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">
+        <img src="{% static 'img/logo.png' %}">
+      </div>
+      <span class="logo-text">REHOBOT BOX</span>
+    </div>
+    <div class="sidebar-nav">
+      <a href="{% url 'inicio' %}" class="nav-link">
+        <span class="nav-icon"><i class="fa-solid fa-house"></i></span>
+        Inicio
+      </a>
+      <a href="{% url 'lista_rutinas' %}" class="nav-link active">
+        <span class="nav-icon"><i class="fa-solid fa-dumbbell"></i></span>
+        Mis Rutinas
+      </a>
+      <a href="{% url 'planes' %}" class="nav-link">
+        <span class="nav-icon"><i class="fa-solid fa-bolt"></i></span>
+        Planes
+      </a>
+      <a href="{% url 'logout' %}" class="nav-link logout">
+        <span class="nav-icon"><i class="fa-solid fa-right-from-bracket"></i></span>
+        Cerrar Sesión
+      </a>
+    </div>
+  </nav>
+
+  <header class="topbar">
+    <label for="sidebar-toggle" class="menu-btn" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </label>
+    <span class="topbar-title">DETALLE RUTINA</span>
+  </header>
+
+  <main class="main">
+
+    <div class="detalle-header">
+      <h2 class="detalle-titulo">{{ rutina.nombre_rutina|upper }}</h2>
+      <div class="detalle-acciones">
+        <a href="{% url 'editar_rutina' rutina.pk %}" class="btn-editar-detalle">Editar</a>
+        <a href="{% url 'lista_rutinas' %}" class="btn-volver">← Volver</a>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="info-grid">
+        <div class="info-item">
+          <label>Nivel</label>
+          <p>{{ rutina.get_nivel_display }}</p>
+        </div>
+        <div class="info-item">
+          <label>Días</label>
+          <p>{{ rutina.get_dias_display }}</p>
+        </div>
+        <div class="info-item">
+          <label>Duración</label>
+          <p>{{ rutina.duracion }} min</p>
+        </div>
+        <div class="info-item">
+          <label>Tipo</label>
+          <p>{{ rutina.get_tipo_entrenamiento_display }}</p>
+        </div>
+      </div>
+      {% if rutina.descripcion %}
+      <div class="detalle-desc">{{ rutina.descripcion }}</div>
+      {% endif %}
+    </div>
+
+    <p class="ejercicios-titulo">
+      EJERCICIOS <span>({{ rutina.ejercicios.count }})</span>
+    </p>
+
+    {% for re in rutina.ejercicios.all %}
+    <div class="ejercicio-item">
+      <div>
+        <div class="ejercicio-nombre">{{ re.id_ejercicio.nombreEjercicio }}</div>
+        <div class="ejercicio-grupo">{{ re.id_ejercicio.get_grupo_muscular_display }}</div>
+      </div>
+      <div class="ejercicio-badges">
+        <span class="badge badge-series">{{ re.series }} series</span>
+        <span class="badge badge-reps">{{ re.repeticiones }} reps</span>
+      </div>
+    </div>
+    {% empty %}
+      <p style="color:var(--text-muted); text-align:center; padding:20px;">
+        Esta rutina no tiene ejercicios.
+      </p>
+    {% endfor %}
+
+  </main>
+
+</body>
+</html>
