@@ -1,0 +1,141 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% if rutina %}Editar Rutina{% else %}Nueva Rutina{% endif %} — Rehobotbox Gym</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'css/rutinas.css' %}">
+</head>
+<body>
+
+  <input type="checkbox" id="sidebar-toggle">
+  <label for="sidebar-toggle" class="overlay"></label>
+
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">
+        <img src="{% static 'img/logo.png' %}">
+      </div>
+      <span class="logo-text">REHOBOT BOX</span>
+    </div>
+    <div class="sidebar-nav">
+      <a href="{% url 'inicio' %}" class="nav-link">
+        <span class="nav-icon"><i class="fa-solid fa-house"></i></span>
+        Inicio
+      </a>
+      <a href="{% url 'lista_rutinas' %}" class="nav-link active">
+        <span class="nav-icon"><i class="fa-solid fa-dumbbell"></i></span>
+        Mis Rutinas
+      </a>
+      <a href="{% url 'planes' %}" class="nav-link">
+        <span class="nav-icon"><i class="fa-solid fa-bolt"></i></span>
+        Planes
+      </a>
+      <a href="{% url 'logout' %}" class="nav-link logout">
+        <span class="nav-icon"><i class="fa-solid fa-right-from-bracket"></i></span>
+        Cerrar Sesión
+      </a>
+    </div>
+  </nav>
+
+  <header class="topbar">
+    <label for="sidebar-toggle" class="menu-btn" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </label>
+    <span class="topbar-title">
+      {% if rutina %}EDITAR RUTINA{% else %}NUEVA RUTINA{% endif %}
+    </span>
+  </header>
+
+  <main class="main">
+    <div class="form-container">
+      <div class="form-card">
+
+        <form method="POST">
+          {% csrf_token %}
+
+          <div class="campo">
+            <label>Nombre de la rutina</label>
+            <input type="text" name="nombre_rutina"
+              placeholder="Ej: Pecho y Tríceps"
+              value="{{ rutina.nombre_rutina|default:'' }}"
+              required>
+          </div>
+
+          <div class="campo">
+            <label>Nivel</label>
+            <select name="nivel" required>
+              <option value="">Selecciona un nivel...</option>
+              <option value="principiante" {% if rutina.nivel == 'principiante' %}selected{% endif %}>Principiante</option>
+              <option value="intermedio"   {% if rutina.nivel == 'intermedio'   %}selected{% endif %}>Intermedio</option>
+              <option value="avanzado"     {% if rutina.nivel == 'avanzado'     %}selected{% endif %}>Avanzado</option>
+            </select>
+          </div>
+
+          <div class="campo">
+            <label>Descripción <span style="color:var(--text-muted); font-weight:400; text-transform:none;">(opcional)</span></label>
+            <textarea name="descripcion"
+              placeholder="¿Cuál es el objetivo de esta rutina?">{{ rutina.descripcion|default:'' }}</textarea>
+          </div>
+
+          <div class="campo">
+            <label>Días de entrenamiento</label>
+            <div class="dias-grid">
+              {% for valor, nombre in dias_choices %}
+              <label class="dia-label">
+                <input type="checkbox" name="dias" value="{{ valor }}"
+                  {% if valor in dias_seleccionados %}checked{% endif %}>
+                {{ nombre }}
+              </label>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="campo">
+            <label>Ejercicios</label>
+            {% regroup ejercicios by get_grupo_muscular_display as grupos %}
+            {% for grupo in grupos %}
+              <div class="grupo-titulo">{{ grupo.grouper }}</div>
+              {% for ejercicio in grupo.list %}
+              <div class="ejercicio-fila">
+                <label class="ejercicio-check">
+                  <input type="checkbox"
+                    name="ejercicio_{{ ejercicio.pk }}"
+                    value="{{ ejercicio.pk }}"
+                    {% if ejercicio.pk in ejercicios_seleccionados %}checked{% endif %}>
+                  {{ ejercicio.nombreEjercicio }}
+                </label>
+                <div>
+                  <input type="number" class="input-numero"
+                    name="series_{{ ejercicio.pk }}"
+                    value="3" min="1" max="10">
+                  <div class="input-label">Series</div>
+                </div>
+                <div>
+                  <input type="number" class="input-numero"
+                    name="reps_{{ ejercicio.pk }}"
+                    value="12" min="1" max="50">
+                  <div class="input-label">Reps</div>
+                </div>
+              </div>
+              {% endfor %}
+            {% endfor %}
+          </div>
+
+          <div class="form-acciones">
+            <button type="submit" class="btn-guardar">
+              {% if rutina %}Guardar cambios{% else %}Crear rutina{% endif %}
+            </button>
+            <a href="{% url 'lista_rutinas' %}" class="btn-cancelar">Cancelar</a>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>

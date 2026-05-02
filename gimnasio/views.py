@@ -18,6 +18,8 @@ def planes(request):
 #home
 @login_required
 def inicio(request):
+    print("Usuario actual:", request.user)
+    print("ID usuario:", request.user.id)
 
     membresia_activa = Membresia.objects.filter(
         id_usuario=request.user,

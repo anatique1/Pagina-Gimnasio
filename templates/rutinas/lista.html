@@ -1,0 +1,94 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mis Rutinas — Rehobotbox Gym</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'css/rutinas.css' %}">
+</head>
+<body>
+
+  <input type="checkbox" id="sidebar-toggle">
+  <label for="sidebar-toggle" class="overlay"></label>
+
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">
+        <img src="{% static 'img/logo.png' %}">
+      </div>
+      <span class="logo-text">REHOBOT BOX</span>
+    </div>
+    <div class="sidebar-nav">
+      <a href="{% url 'inicio' %}" class="nav-link">
+        <span class="nav-icon"><i class="fa-solid fa-house"></i></span>
+        Inicio
+      </a>
+      <a href="{% url 'lista_rutinas' %}" class="nav-link active">
+        <span class="nav-icon"><i class="fa-solid fa-dumbbell"></i></span>
+        Mis Rutinas
+      </a>
+      <a href="{% url 'planes' %}" class="nav-link">
+        <span class="nav-icon"><i class="fa-solid fa-bolt"></i></span>
+        Planes
+      </a>
+      <a href="{% url 'logout' %}" class="nav-link logout">
+        <span class="nav-icon"><i class="fa-solid fa-right-from-bracket"></i></span>
+        Cerrar Sesión
+      </a>
+    </div>
+  </nav>
+
+  <header class="topbar">
+    <label for="sidebar-toggle" class="menu-btn" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </label>
+    <span class="topbar-title">MIS RUTINAS</span>
+  </header>
+
+  <main class="main">
+
+    <div class="page-header">
+      <h2 class="page-titulo">MIS <span>RUTINAS</span></h2>
+      <a href="{% url 'crear_rutina' %}" class="btn-nueva">+ Nueva rutina</a>
+    </div>
+
+    {% if rutinas %}
+      <div class="rutinas-grid">
+        {% for rutina in rutinas %}
+        <div class="rutina-card">
+          <p class="rutina-card-nombre">{{ rutina.nombre_rutina }}</p>
+          <div class="rutina-meta">
+            <span><strong>Nivel:</strong> {{ rutina.get_nivel_display }}</span>
+            <span><strong>Días:</strong> {{ rutina.get_dias_display }}</span>
+            <span><strong>Ejercicios:</strong> {{ rutina.ejercicios.count }}</span>
+            {% if rutina.descripcion %}
+              <span>{{ rutina.descripcion }}</span>
+            {% endif %}
+          </div>
+          <div class="rutina-acciones">
+            <a href="{% url 'editar_rutina' rutina.pk %}" class="btn-editar">Editar</a>
+            <form method="POST" action="{% url 'eliminar_rutina' rutina.pk %}">
+              {% csrf_token %}
+              <button type="submit" class="btn-eliminar"
+                onclick="return confirm('¿Eliminar esta rutina?')">
+                Eliminar
+              </button>
+            </form>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="vacio">
+        <p>Aún no tienes rutinas creadas.</p>
+        <a href="{% url 'crear_rutina' %}" class="btn-nueva">Crea tu primera rutina</a>
+      </div>
+    {% endif %}
+
+  </main>
+
+</body>
+</html>
