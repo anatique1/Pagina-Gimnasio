@@ -5,30 +5,62 @@
 <head>
     <title>Rehobotbox Gym</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/styleLogin.css' %}">
 </head>
 
 <body>
     
-    <header>
-        <div class="logo">
-            <img src="{% static 'img/logo.png' %}">
-            <h1 class="gym-logo">REHOBOT BOX</h1>
-        </div>
-        <a href="{% url 'planes' %}">
-            VER PLANES
-        </a>
-        <a href="{% provider_login_url 'google' prompt='select_account' %}" class="btn-header-google">
+  <input type="checkbox" id="sidebar-toggle">
+  <label for="sidebar-toggle" class="overlay"></label>
+
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">
+        <img src="{% static 'img/logo.png' %}">
+      </div>
+      <span class="logo-text">REHOBOT BOX</span>
+    </div>
+    <div class="sidebar-nav">
+      <a href="{% url 'inicio' %}" class="nav-link active">
+        <span class="nav-icon"><i class="fa-solid fa-house"></i></span>
+        Inicio
+      </a>
+      <a href="{% url 'lista_rutinas' %}" class="nav-link">
+        <span class="nav-icon"><i class="fa-solid fa-dumbbell"></i></span>
+        Sobre Nosotros
+      </a>
+      <a href="{% url 'planes' %}" class="nav-link">
+        <span class="nav-icon"><i class="fa-solid fa-bolt"></i></span>
+        Planes
+      </a>
+      <a href="{% url 'logout' %}" class="nav-link ">
+        <span class="nav-icon"><i class="fa-solid fa-right-from-bracket"></i></span>
+        Ubicación
+      </a>
+    </div>
+  </nav>
+
+  <header class="topbar">
+    <label for="sidebar-toggle" class="menu-btn" aria-label="Menú">
+      <span></span>
+      <span></span>
+      <span></span>
+    </label>
+    <span class="topbar-title">REHOBOT BOX</span>
+     <a href="{% provider_login_url 'google' prompt='select_account' %}" class="btn-header-google">
                         <span class="g-icon">G</span>
                         INICIAR SESION
         </a>
-    </header>
+  </header>
+
 <!-- CONTENIDO -->
     <section class="hero-login">
         <div class="hero-login-overlay"></div>
         <div class="hero-login-content">
             <h2 class="hero-login-title">
-                    BIENVENIDOS A <br>
+                    BIENVENIDOS A <br></h2>
             <h1 class="hero-login-name">REHOBOT BOX</h1>
             
         </div>
@@ -48,7 +80,130 @@
         </div>
     </section>
 
-   
+<!-- UBICACIÓN -->
+<section class="ubicacion-section">
+    <div class="ubicacion-header">
+        <h2 class="ubicacion-title">¿DÓNDE <span>ESTAMOS?</span></h2>
+        <p class="ubicacion-subtitle">Ven y conocenos</p>
+    </div>
+
+    <div class="ubicacion-grid">
+        <div class="ubicacion-info">
+            <div class="info-item">
+                <i class="fa-solid fa-location-dot"></i>
+                <div>
+                    <h4>Dirección</h4>
+                    <p>Manzana A #casa 34, Villa del Prado, El Espinal, Tolima </p>
+                </div>
+            </div>
+            <div class="info-item">
+                <i class="fa-solid fa-clock"></i>
+                <div>
+                    <h4>Horarios</h4>
+                    <p>Lunes a Viernes: 6:00am – 9:00pm</p>
+                    <p>Sábados: 7:00am – 12:00pm</p>
+                </div>
+            </div>
+            <div class="info-item">
+                <i class="fa-solid fa-phone"></i>
+                <div>
+                    <h4>Contacto</h4>
+                    <p>+57 300 123 4567</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="ubicacion-mapa">
+            <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5441.651660614107!2d-74.89118116905499!3d4.154767631266115!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3ed37826e8734d%3A0x9de48ca8c1c4f2f0!2sRehobot%20Box%20and%20Gym!5e0!3m2!1ses-419!2sco!4v1777766971314!5m2!1ses-419!2sco" width="600" height="450" style="border:0;" 
+            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            
+        </div>
+    </div>
+</section>
+
+
+<!-- comunidad running -->
+ <section class="hero comunidad-section">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <p class="hero-eyebrow">¡Corre con nosotros!</p>
+            <h1 class="hero-title">
+                    COMUNIDAD<br>
+                    <span class="hero-highlight">RUNNING</span>
+                </h1>
+    </div>
+
+    <div class="galeria-track">
+    <div class="galeria-slide">
+        <img src="{% static 'img/running/running1.jpg' %}" alt="Running">
+    </div>
+    <div class="galeria-slide">
+        <img src="{% static 'img/running/running2.jpg' %}" alt="Running">
+    </div>
+    <div class="galeria-slide">
+        <img src="{% static 'img/running/running3.jpg' %}" alt="Running">
+    </div>
+    
+
+    <!-- duplicado para el loop infinito -->
+    <div class="galeria-slide">
+        <img src="{% static 'img/running/running1.jpg' %}" alt="Running">
+    </div>
+    <div class="galeria-slide">
+        <img src="{% static 'img/running/running2.jpg' %}" alt="Running">
+    </div>
+    <div class="galeria-slide">
+        <img src="{% static 'img/running/running3.jpg' %}" alt="Running">
+    </div>
+</div>
+ </section>
+
+
+
+<!-- BENEFICIOS MEMBRESÍA -->
+<section class="beneficios-section">
+    <div class="beneficios-header">
+        <h2 class="beneficios-title">¿QUÉ <span>INCLUYE</span> TU MEMBRESÍA?</h2>
+    </div>
+
+    <div class="beneficios-grid">
+
+        <div class="beneficio-card">
+            <div class="beneficio-icon">
+                <i class="fa-solid fa-person-walking"></i>
+            </div>
+            <h3 class="beneficio-nombre">Personal Trainer</h3>
+            <p class="beneficio-desc">
+                Un entrenador dedicado a ti que diseña tu plan de entrenamiento,
+                corrige tu técnica y te motiva a superar tus límites cada sesión.
+            </p>
+        </div>
+
+        <div class="beneficio-card">
+            <div class="beneficio-icon">
+                <i class="fa-solid fa-people-group"></i>
+            </div>
+            <h3 class="beneficio-nombre">Clases Grupales</h3>
+            <p class="beneficio-desc">
+                Acceso ilimitado a todas nuestras clases: Running , crossfit,
+                Rumba terapia y más. Entrena en comunidad y mantén la motivación.
+            </p>
+        </div>
+
+        <div class="beneficio-card">
+            <div class="beneficio-icon">
+                <i class="fa-solid fa-laptop"></i>
+            </div>
+            <h3 class="beneficio-nombre">Plataforma Digital</h3>
+            <p class="beneficio-desc">
+                Crea rutinas personalizadas, lleva el seguimiento de tu progreso
+                y accede a tu historial de entrenamientos desde cualquier dispositivo.
+            </p>
+        </div>
+
+    </div>
+</section>
 
 </body>
 </html>
