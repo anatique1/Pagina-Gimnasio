@@ -23,21 +23,29 @@
       <span class="logo-text">REHOBOT BOX</span>
     </div>
     <div class="sidebar-nav">
-      <a href="{% url 'inicio' %}" class="nav-link active">
+      <a href="#inicio" class="nav-link active">
         <span class="nav-icon"><i class="fa-solid fa-house"></i></span>
         Inicio
       </a>
-      <a href="{% url 'lista_rutinas' %}" class="nav-link">
+      <a href="#sobre-nosotros" class="nav-link">
         <span class="nav-icon"><i class="fa-solid fa-dumbbell"></i></span>
         Sobre Nosotros
       </a>
-      <a href="{% url 'planes' %}" class="nav-link">
+      <a href="#planes" class="nav-link">
         <span class="nav-icon"><i class="fa-solid fa-bolt"></i></span>
         Planes
       </a>
-      <a href="{% url 'logout' %}" class="nav-link ">
-        <span class="nav-icon"><i class="fa-solid fa-right-from-bracket"></i></span>
+      <a href="#ubicacion" class="nav-link ">
+        <span class="nav-icon"><i class="fa-solid fa-location-dot"></i></span>
         Ubicación
+      </a>
+      <a href="#comunidad" class="nav-link ">
+        <span class="nav-icon"><i class="fa-solid fa-running"></i></span>
+        Comunidad
+      </a>
+      <a href="#beneficios" class="nav-link ">
+        <span class="nav-icon"><i class="fa-solid fa-gift"></i></span>
+        Beneficios 
       </a>
     </div>
   </nav>
@@ -56,7 +64,7 @@
   </header>
 
 <!-- CONTENIDO -->
-    <section class="hero-login">
+    <section class="hero-login" id="inicio">
         <div class="hero-login-overlay"></div>
         <div class="hero-login-content">
             <h2 class="hero-login-title">
@@ -69,7 +77,7 @@
 
     
 <!-- HERO -->
-    <section class="hero">
+    <section class="hero" id="sobre-nosotros">
         <div class="hero-overlay"></div>
         <div class="hero-content">
             <p class="hero-eyebrow">Únete hoy</p>
@@ -81,7 +89,7 @@
     </section>
 
 <!-- UBICACIÓN -->
-<section class="ubicacion-section">
+<section class="ubicacion-section" id="ubicacion">
     <div class="ubicacion-header">
         <h2 class="ubicacion-title">¿DÓNDE <span>ESTAMOS?</span></h2>
         <p class="ubicacion-subtitle">Ven y conocenos</p>
@@ -124,7 +132,7 @@
 
 
 <!-- comunidad running -->
- <section class="hero comunidad-section">
+ <section class="hero comunidad-section" id="comunidad">
     <div class="hero-overlay"></div>
     <div class="hero-content">
         <p class="hero-eyebrow">¡Corre con nosotros!</p>
@@ -134,35 +142,31 @@
                 </h1>
     </div>
 
-    <div class="galeria-track">
-    <div class="galeria-slide">
-        <img src="{% static 'img/running/running1.jpg' %}" alt="Running">
-    </div>
-    <div class="galeria-slide">
-        <img src="{% static 'img/running/running2.jpg' %}" alt="Running">
-    </div>
-    <div class="galeria-slide">
-        <img src="{% static 'img/running/running3.jpg' %}" alt="Running">
-    </div>
-    
 
-    <!-- duplicado para el loop infinito -->
-    <div class="galeria-slide">
-        <img src="{% static 'img/running/running1.jpg' %}" alt="Running">
+    <!-- galeria de fotos -->
+        <div class="slider-wrapper">
+        <div class="slider">    
+            <img id="slide1" src="{% static 'img/running/running1.jpeg' %}" alt="Running"/>
+            <img id="slide2" src="{% static 'img/running/running2.jpeg' %}" alt="Running"/>
+            <img id="slide3" src="{% static 'img/running/running3.jpeg' %}" alt="Running"/>      
+            <img id="slide4" src="{% static 'img/running/running4.jpeg' %}" alt="Running"/>
+            <img id="slide5" src="{% static 'img/running/running5.jpeg' %}" alt="Running"/>      
+        </div>
+        <div class="slider-nav">
+            <a href="#slide1">1</a>
+            <a href="#slide2">2</a>
+            <a href="#slide3">3</a>
+            <a href="#slide4">4</a>
+            <a href="#slide5">5</a>
+        </div>
     </div>
-    <div class="galeria-slide">
-        <img src="{% static 'img/running/running2.jpg' %}" alt="Running">
-    </div>
-    <div class="galeria-slide">
-        <img src="{% static 'img/running/running3.jpg' %}" alt="Running">
-    </div>
-</div>
+
  </section>
 
 
 
 <!-- BENEFICIOS MEMBRESÍA -->
-<section class="beneficios-section">
+<section class="beneficios-section" id="beneficios">
     <div class="beneficios-header">
         <h2 class="beneficios-title">¿QUÉ <span>INCLUYE</span> TU MEMBRESÍA?</h2>
     </div>

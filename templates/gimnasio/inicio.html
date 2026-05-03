@@ -84,10 +84,12 @@
     </section>
 
     <section class="rutinas-wrap">
-      <div class="section-header">
-        <h2 class="section-title">Mis Rutinas</h2>
-        <a href="{% url 'crear_rutina' %}" class="fab" title="Nueva rutina">+</a>
-        <a href="{% url 'lista_rutinas' %}" class="section-link">Ver todas →</a>
+  <div class="rutinas-border-box">
+    <div class="rutinas-top-bar">
+      <h2 class="section-title">Mis Rutinas</h2>
+      <a href="{% url 'lista_rutinas' %}" class="section-link">Ver todas →</a>
+    </div>
+    <div class="rutinas-content">
       </div>
       {% if rutinas %}
         <div class="rutinas-grid">
@@ -104,6 +106,9 @@
           <p>No tienes rutinas aún.</p>
         </div>
       {% endif %}
+      </div> <!-- cierra rutinas-content -->
+      <a href="{% url 'crear_rutina' %}" class="fab-inline" title="Nueva rutina">+</a>
+      </div> <!-- cierra rutinas-border-box -->
     </section>
 
   </main>

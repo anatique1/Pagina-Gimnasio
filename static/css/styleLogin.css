@@ -398,18 +398,84 @@ body {
 }
 /* ── comunidad running ────────────────────── */
 .comunidad-section {
-    position: relative;
-    min-height: 55vh;
+    background-image: url('https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=1600&q=80');
+    background-size: cover;
+    background-position: center;
     display: flex;
-    align-items: flex-end;
-    padding: 0 60px 60px;
-    background:
-        url('https://www.magnific.com/es/foto-gratis/grupo-personas-haciendo-ejercicio-juntos-al-aire-libre_94497053.htm#fromView=search&page=1&position=18&uuid=6c78186d-d1e9-458c-af9a-9c0916d1b14d&query=correr+comunidad')
-        center/cover no-repeat;
+    align-items: center;
+    justify-content: space-between;
+    padding: 60px 60px;
+    gap: 40px;
+    min-height: 55vh;
     overflow: hidden;
 }
 
+.comunidad-section .hero-content {
+    flex: 1;
+    padding: 0;
+}
+.slider-wrapper {
+    width: 550px;
+    flex-shrink: 0;
+    position: relative;
+}
 
+.slider {
+    display: flex;
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    gap: 0;
+    padding: 0;
+    scrollbar-width: none;
+    border-radius: 16px;
+}
+.slider::-webkit-scrollbar { display: none; }
+
+.slider img {
+    flex: 0 0 100%;
+    height: 400px;
+    object-fit: cover;
+    scroll-snap-align: center;
+    border-radius: 14px;
+    border: 1px solid var(--border-subtle);
+    transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+    cursor: pointer;
+}
+
+.slider img:hover {
+    transform: scale(1.05);
+    border-color: rgba(233,30,140,0.5);
+    box-shadow: var(--glow-pink);
+}
+
+/* dots */
+.slider-nav {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 14px;
+    position: static;
+    transform: none;
+}
+
+.slider-nav a {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    opacity: 0.5;
+    transition: all var(--transition);
+    font-size: 0;
+    display: block;
+}
+
+.slider-nav a:hover {
+    opacity: 1;
+    background: var(--neon-pink);
+    width: 20px;
+    border-radius: 4px;
+}
 /* ── 8. PLANES ───────────────────────────────*/
 .planes-section {
     padding: 90px 60px;
