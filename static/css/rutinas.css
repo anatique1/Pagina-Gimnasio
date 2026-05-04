@@ -710,6 +710,60 @@ body {
 .btn-editar-detalle:hover {
   background: rgba(0,212,255,0.1);
 }
+.ejercicios-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+/* ══ IMAGEN O VIDEO DEL EJERCICIO ════════════════════════ */
+.ejercicio-item {
+  flex-direction: column;
+  align-items: stretch;
+  padding: 0;
+  overflow: hidden;
+}
+
+.ejercicio-media {
+  width: 100%;
+  height: 220px;
+  background: rgba(255,255,255,0.03);
+  overflow: hidden;
+  border-radius: 10px 10px 0 0;
+}
+
+.ejercicio-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ejercicio-media iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.ejercicio-media--vacio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: var(--text-muted);
+  opacity: 0.4;
+}
+.ejercicio-media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.ejercicio-info {
+  padding: 12px 18px 0;
+}
+
+.ejercicio-badges {
+  padding: 10px 18px 14px;
+}
+
 
 /* ══ RESPONSIVE ═════════════════════════════ */
 @media (max-width: 600px) {
