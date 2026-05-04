@@ -86,23 +86,41 @@
       EJERCICIOS <span>({{ rutina.ejercicios.count }})</span>
     </p>
 
-    {% for re in rutina.ejercicios.all %}
-    <div class="ejercicio-item">
-      <div>
-        <div class="ejercicio-nombre">{{ re.id_ejercicio.nombreEjercicio }}</div>
-        <div class="ejercicio-grupo">{{ re.id_ejercicio.get_grupo_muscular_display }}</div>
-      </div>
-      <div class="ejercicio-badges">
-        <span class="badge badge-series">{{ re.series }} series</span>
-        <span class="badge badge-reps">{{ re.repeticiones }} reps</span>
-      </div>
-    </div>
-    {% empty %}
-      <p style="color:var(--text-muted); text-align:center; padding:20px;">
-        Esta rutina no tiene ejercicios.
-      </p>
-    {% endfor %}
+<div class="ejercicios-lista">
+{% for re in rutina.ejercicios.all %}
+<div class="ejercicio-item">
 
+  {% if re.id_ejercicio.video %}
+    <div class="ejercicio-media">
+      <video controls>
+        <source src="{{ re.id_ejercicio.video.url }}" type="video/mp4">
+      </video>
+    </div>
+  {% elif re.id_ejercicio.imagen %}
+    <div class="ejercicio-media">
+      <img src="{{ re.id_ejercicio.imagen.url }}" alt="{{ re.id_ejercicio.nombreEjercicio }}">
+    </div>
+  {% else %}
+    <div class="ejercicio-media ejercicio-media--vacio">
+      <i class="fa-solid fa-dumbbell"></i>
+    </div>
+  {% endif %}
+
+  <div class="ejercicio-info">
+    <div class="ejercicio-nombre">{{ re.id_ejercicio.nombreEjercicio }}</div>
+    <div class="ejercicio-grupo">{{ re.id_ejercicio.get_grupo_muscular_display }}</div>
+  </div>
+  <div class="ejercicio-badges">
+    <span class="badge badge-series">{{ re.series }} series</span>
+    <span class="badge badge-reps">{{ re.repeticiones }} reps</span>
+  </div>
+</div>
+{% empty %}
+  <p style="color:var(--text-muted); text-align:center; padding:20px;">
+    Esta rutina no tiene ejercicios.
+  </p>
+{% endfor %}
+</div>
   </main>
 
 </body>
