@@ -2,14 +2,6 @@ from django.db import models
 from usuarios.models import Usuario
 
 
-class Equipamiento(models.Model):
-    nombre = models.CharField(max_length=100)
-    descripcion = models.TextField(blank=True)
-    imagen = models.ImageField(upload_to='equipamiento/', blank=True, null=True)
-
-    def __str__(self):
-        return self.nombre
-    
 class Ejercicio(models.Model):
     GRUPOS = [
         ('pecho', 'Pecho'),
@@ -24,11 +16,9 @@ class Ejercicio(models.Model):
     ]
     id_ejercicio = models.AutoField(primary_key=True)
     nombreEjercicio = models.CharField(max_length=100)
-    descripcion = models.TextField()
     grupo_muscular = models.CharField(max_length=20, choices=GRUPOS, default='core')
     imagen = models.ImageField(upload_to='ejercicios/', blank=True, null=True)
     video = models.FileField(upload_to='ejercicios/videos/', blank=True, null=True)
-    equipamiento = models.ManyToManyField(Equipamiento, blank=True) 
     def __str__(self):
         return self.nombreEjercicio
 

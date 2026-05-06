@@ -9,6 +9,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="{% static 'css/rutinas.css' %}">
 </head>
+
+
+
 <body>
 
   <input type="checkbox" id="sidebar-toggle">
@@ -96,34 +99,52 @@
 
           <div class="campo">
             <label>Ejercicios</label>
+            <!-- Barra de búsqueda -->
+            <input type="text" id="buscador-ejercicios" placeholder="🔍 Buscar ejercicio..." class="buscador-ejercicios">
+            <div id="dropdown-resultados" class="dropdown-resultados" style="display:none;"></div>
+            <!-- Grupos colapsables -->
             {% regroup ejercicios by get_grupo_muscular_display as grupos %}
             {% for grupo in grupos %}
-              <div class="grupo-titulo">{{ grupo.grouper }}</div>
-              {% for ejercicio in grupo.list %}
-              <div class="ejercicio-fila">
-                <label class="ejercicio-check">
-                  <input type="checkbox"
-                    name="ejercicio_{{ ejercicio.pk }}"
-                    value="{{ ejercicio.pk }}"
-                    {% if ejercicio.pk in ejercicios_seleccionados %}checked{% endif %}>
-                  {{ ejercicio.nombreEjercicio }}
-                </label>
+            <div class="grupo-collapsible" data-grupo="{{ grupo.grouper }}">
+              <button type="button" class="grupo-header">
+                <span>{{ grupo.grouper }}</span>
+                <span class="grupo-count">{{ grupo.list|length }} ejercicios</span>
+                <i class="fa-solid fa-chevron-down grupo-arrow"></i>
+              </button>
+
+              <div class="grupo-body" style="display:none;">
+                {% for ejercicio in grupo.list %}
+                <div class="ejercicio-fila" data-nombre="{{ ejercicio.nombreEjercicio|lower }}" data-grupo="{{ grupo.grouper }}">
+                  <label class="ejercicio-check">
+                    <input type="checkbox"
+                      name="ejercicio_{{ ejercicio.pk }}"
+                      value="{{ ejercicio.pk }}"
+                      {% if ejercicio.pk in ejercicios_seleccionados %}checked{% endif %}>
+                    {{ ejercicio.nombreEjercicio }}
+                  </label>
                 <div>
                   <input type="number" class="input-numero"
                     name="series_{{ ejercicio.pk }}"
-                    value="3" min="1" max="10">
+                    value="3" min="1" max="100">
                   <div class="input-label">Series</div>
                 </div>
                 <div>
                   <input type="number" class="input-numero"
                     name="reps_{{ ejercicio.pk }}"
-                    value="12" min="1" max="50">
-                  <div class="input-label">Reps</div>
-                </div>
+                    value="12" min="1" max="2000">
+                <div class="input-label">Reps</div>
               </div>
-              {% endfor %}
+            </div>
             {% endfor %}
+
+            <button type="button" class="btn-ver-mas" style="display:none;">
+              Ver más <i class="fa-solid fa-chevron-down"></i>
+            </button>
           </div>
+
+        </div>
+        {% endfor %}
+      </div>
 
           <div class="form-acciones">
             <button type="submit" class="btn-guardar">
@@ -136,6 +157,116 @@
       </div>
     </div>
   </main>
+
+
+<script>
+const POR_PAGINA = 10;
+const buscador = document.getElementById('buscador-ejercicios');
+const dropdown = document.getElementById('dropdown-resultados');
+const todasLasFilas = [...document.querySelectorAll('.ejercicio-fila')];
+
+buscador.addEventListener('input', function() {
+  const texto = this.value.toLowerCase().trim();
+  dropdown.innerHTML = '';
+
+  if (texto === '') {
+    dropdown.style.display = 'none';
+    return;
+  }
+
+  const coinciden = todasLasFilas.filter(f => f.dataset.nombre.includes(texto));
+
+  if (coinciden.length === 0) {
+    dropdown.innerHTML = '<div class="dropdown-item-vacio">No se encontraron ejercicios</div>';
+    dropdown.style.display = 'block';
+    return;
+  }
+
+  coinciden.forEach(fila => {
+    const nombre = fila.querySelector('.ejercicio-check').textContent.trim();
+    const checkbox = fila.querySelector('input[type="checkbox"]');
+    const item = document.createElement('div');
+    item.className = 'dropdown-item';
+    item.textContent = nombre;
+    if (checkbox.checked) item.classList.add('seleccionado');
+
+    item.addEventListener('click', () => {
+      // 1. marca el checkbox
+      checkbox.checked = true;
+
+      // 2. abre el grupo al que pertenece
+      const grupoBody = fila.closest('.grupo-body');
+      const grupoHeader = grupoBody.previousElementSibling;
+      grupoBody.style.display = 'block';
+      grupoHeader.classList.add('open');
+
+      // 3. muestra la fila aunque este en "ver mas"
+      fila.style.display = '';
+
+      // 4. cierra dropdown y limpia buscador
+      dropdown.style.display = 'none';
+      buscador.value = '';
+
+      // 5. scroll hasta el ejercicio
+      setTimeout(() => {
+        fila.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        fila.style.border = '1px solid var(--neon-pink)';
+        setTimeout(() => {
+          fila.style.border = '';
+        }, 2000);
+      }, 200);
+    });
+
+    dropdown.appendChild(item);
+  });
+
+  dropdown.style.display = 'block';
+});
+
+document.addEventListener('click', function(e) {
+  if (!buscador.contains(e.target) && !dropdown.contains(e.target)) {
+    dropdown.style.display = 'none';
+    buscador.value = '';
+  }
+});
+
+buscador.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') e.preventDefault();
+});
+
+// ── Colapsar/expandir grupos ──
+document.querySelectorAll('.grupo-header').forEach(header => {
+  header.addEventListener('click', () => {
+    const body = header.nextElementSibling;
+    const abierto = body.style.display !== 'none';
+    body.style.display = abierto ? 'none' : 'block';
+    header.classList.toggle('open', !abierto);
+  });
+});
+
+// ── Ver más ──
+function inicializarGrupo(body) {
+  const filas = [...body.querySelectorAll('.ejercicio-fila')];
+  const btnVerMas = body.querySelector('.btn-ver-mas');
+  let mostrados = POR_PAGINA;
+
+  function actualizar() {
+    filas.forEach((f, i) => {
+      f.style.display = i < mostrados ? '' : 'none';
+    });
+    btnVerMas.style.display = mostrados < filas.length ? 'block' : 'none';
+  }
+
+  btnVerMas.addEventListener('click', () => {
+    mostrados += POR_PAGINA;
+    actualizar();
+  });
+
+  actualizar();
+}
+
+document.querySelectorAll('.grupo-body').forEach(inicializarGrupo);
+</script>
 
 </body>
 </html>
