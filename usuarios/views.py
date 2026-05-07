@@ -17,7 +17,7 @@ def logout_view(request):
     from django.contrib.auth import logout
     logout(request)
     return redirect('inicio')
-
+@login_required
 def redirigir_por_rol(request):
     if request.user.is_authenticated:
         print("USUARIO:", request.user.email)

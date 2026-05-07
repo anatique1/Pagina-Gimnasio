@@ -72,6 +72,7 @@ def panel_admin(request):
         'total_usuarios': total_usuarios,
         'total_planes': total_planes,
         'membresias_activas': membresias_activas,
+        'total_rutinas':     Rutina.objects.count(),
     })
 #PANEL DE ADMI (GESTIONAR LA INFORMACION DE LOS USUARIOS)
 
