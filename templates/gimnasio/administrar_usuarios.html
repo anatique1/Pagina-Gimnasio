@@ -1,49 +1,105 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Gestionar Usuarios - Rehobotbox Gym</title>
-</head>
-<body>
-    <h1>Gestionar usuarios</h1>
-    <a href="{% url 'panel_admin' %}">Volver al panel</a>
-    <hr>
-    {% if usuarios %}
-<table border="1">
-    <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Correo</th>
-            <th>Documento</th>
-            <th>Estado</th>
-            <th>Fecha registro</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    {% for usuario in usuarios %}
-        <tr>
-            <td>{{ usuario.first_name }} {{ usuario.last_name }}</td>
-            <td>{{ usuario.email }}</td>
-            <td>{{ usuario.documento }}</td>
-            <td>{{ usuario.estado }}</td>
-            <td>{{ usuario.fecha_registro|date:"d/m/Y" }}</td>
-            <td>
-                <a href="{% url 'admin_cambiar_estado_usuario' usuario.id %}">
-                    {% if usuario.estado == 'activo' %}
-                        Suspender
-                    {% else %}
-                        Activar
-                    {% endif %}
-                </a>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-{% else %}
-    <p>No hay clientes registrados todavía.</p>
-{% endif %}
+{% load static %}
+    
+<link rel="stylesheet" href="{% static 'css/panel_admin.css' %}">
+<link rel="stylesheet" href="{% static 'css/gestionar_usuarios.css' %}">
 
-</body>
-</html>
+<body>
+
+<div class="usuarios-container">
+
+    <div class="usuarios-top">
+
+        <div>
+            <p class="usuarios-tag">Administración</p>
+            <h1 class="usuarios-title">
+                Gestionar <span>Usuarios</span>
+            </h1>
+        </div>
+
+        <a href="{% url 'panel_admin' %}" class="btn-volver">
+            ← Volver
+        </a>
+
+    </div>
+
+    {% if usuarios %}
+
+    <div class="tabla-wrap">
+
+        <table class="usuarios-table">
+
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Documento</th>
+                    <th>Estado</th>
+                    <th>Fecha registro</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+            {% for usuario in usuarios %}
+                <tr>
+
+                    <td>
+                        {{ usuario.first_name }} {{ usuario.last_name }}
+                    </td>
+
+                    <td>{{ usuario.email }}</td>
+
+                    <td>{{ usuario.documento }}</td>
+
+                    <td>
+                        {% if usuario.is_active %}
+                            <span class="estado activo">
+                                Activo
+                            </span>
+                        {% else %}
+                            <span class="estado suspendido">
+                                Suspendido
+                            </span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {{ usuario.fecha_registro|date:"d/m/Y" }}
+                    </td>
+
+                    <td>
+
+                        <a href="{% url 'admin_cambiar_estado_usuario' usuario.id %}"
+                           class="btn-accion">
+
+                            {% if usuario.is_active %}
+                                Suspender
+                            {% else %}
+                                Activar
+                            {% endif %}
+
+                        </a>
+
+                    </td>
+
+                </tr>
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% else %}
+
+        <div class="empty-state">
+            No hay clientes registrados todavía.
+        </div>
+
+    {% endif %}
+
+</div>
+
 </body>

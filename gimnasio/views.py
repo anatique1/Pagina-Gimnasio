@@ -87,21 +87,19 @@ def admin_usuarios(request):
     })
 
 #PERMITE CAMBIAR EL ESTADO DE LOS USUARIOS
-
 @login_required
-
 def admin_cambiar_estado_usuario(request, id_usuario):
-        if not request.user.es_admin():
-            return redirect('inicio')
-        usuario=get_object_or_404(Usuario, id=id_usuario)
-        
-        if usuario.estado == 'activo':
-            usuario.estado = 'suspendido'
-        else:
-            usuario.estado = 'activo'
-        
-        usuario.save()
-        return redirect('admin_usuarios')
+
+    if not request.user.es_admin():
+        return redirect('inicio')
+
+    usuario = get_object_or_404(Usuario, id=id_usuario)
+
+    usuario.is_active = not usuario.is_active
+
+    usuario.save()
+
+    return redirect('panel_admin_usuarios')
 #PERMITE EDITAR, CREAR, ELIMINAR LOS PLANES
 @login_required
 def administrar_planes(request):
@@ -137,4 +135,33 @@ def eliminarPlan(request, id_plan):
     plan = get_object_or_404(Plan,id_plan=id_plan )
     plan.delete()
     return redirect('admin_planes')
+#PERMITE A UN ADMINISTRADOR PRINCIPAL AGREGAR NUEVOS administradores
+@login_required
+def gestionar_admins(request):
+    if not request.user.es_admin():
+        return redirect('inicio')
 
+    from usuarios.models import Usuario
+
+    if request.method == 'POST':
+        accion = request.POST.get('accion')
+        email  = request.POST.get('email')
+
+        try:
+            usuario = Usuario.objects.get(email=email)
+            if accion == 'agregar':
+                usuario.rol = 'admin'
+            elif accion == 'quitar':
+                usuario.rol = 'cliente'
+            usuario.save()
+        except Usuario.DoesNotExist:
+            pass  # el correo no existe en la BD
+
+        return redirect('gestionar_admins')
+
+    admins   = Usuario.objects.filter(rol='admin')
+    clientes = Usuario.objects.filter(rol='cliente')
+    return render(request, 'gimnasio/gestionar_admins.html', {
+        'admins': admins,
+        'clientes': clientes,
+    })

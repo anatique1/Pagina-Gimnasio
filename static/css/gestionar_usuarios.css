@@ -1,0 +1,188 @@
+/* ═══════════════════════════════════ */
+/* CONTENEDOR */
+/* ═══════════════════════════════════ */
+
+.usuarios-container{
+  max-width: 1200px;
+  margin: 110px auto 40px;
+  padding: 0 24px;
+}
+
+/* ═══════════════════════════════════ */
+/* TOP */
+/* ═══════════════════════════════════ */
+
+.usuarios-top{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.usuarios-tag{
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--neon-cyan);
+  margin-bottom: 6px;
+}
+
+.usuarios-title{
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.usuarios-title span{
+  color: var(--neon-pink);
+}
+
+/* ═══════════════════════════════════ */
+/* BOTÓN */
+/* ═══════════════════════════════════ */
+
+.btn-volver{
+  padding: 10px 18px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-size: .8rem;
+  font-weight: 700;
+  color: white;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.04);
+  transition: .2s;
+}
+
+.btn-volver:hover{
+  background: rgba(255,255,255,.08);
+}
+
+/* ═══════════════════════════════════ */
+/* TABLA */
+/* ═══════════════════════════════════ */
+
+.tabla-wrap{
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.usuarios-table{
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.usuarios-table thead{
+  background: rgba(255,255,255,.03);
+}
+
+.usuarios-table th{
+  padding: 18px;
+  text-align: left;
+  font-size: .75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+}
+
+.usuarios-table td{
+  padding: 18px;
+  font-size: .85rem;
+  border-bottom: 1px solid rgba(255,255,255,.05);
+}
+
+.usuarios-table tr:hover{
+  background: rgba(255,255,255,.02);
+}
+
+/* ═══════════════════════════════════ */
+/* ESTADOS */
+/* ═══════════════════════════════════ */
+
+.estado{
+  padding: 6px 12px;
+  border-radius: 50px;
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.estado.activo{
+  background: rgba(0,230,118,.12);
+  color: #00e676;
+}
+
+.estado.suspendido{
+  background: rgba(255,107,107,.12);
+  color: #ff6b6b;
+}
+
+/* ═══════════════════════════════════ */
+/* BOTÓN ACCIÓN */
+/* ═══════════════════════════════════ */
+
+.btn-accion{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--neon-cyan);
+  border: 1px solid rgba(0,212,255,.3);
+  transition: .2s;
+}
+
+.btn-accion:hover{
+  background: rgba(0,212,255,.08);
+}
+
+/* ═══════════════════════════════════ */
+/* EMPTY */
+/* ═══════════════════════════════════ */
+
+.empty-state{
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 40px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+/* ═══════════════════════════════════ */
+/* RESPONSIVE */
+/* ═══════════════════════════════════ */
+
+@media (max-width: 900px){
+
+  .tabla-wrap{
+    overflow-x: auto;
+  }
+
+  .usuarios-table{
+    min-width: 850px;
+  }
+
+}
+
+@media (max-width: 600px){
+
+  .usuarios-title{
+    font-size: 1.5rem;
+  }
+
+  .usuarios-container{
+    padding: 0 16px;
+  }
+
+}

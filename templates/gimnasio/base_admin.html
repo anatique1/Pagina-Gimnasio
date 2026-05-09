@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>{% block title %}REHOBOT BOX{% endblock %}</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet"/>
+
+  <link rel="stylesheet" href="{% static 'css/panel_admin.css' %}"/>
+
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<!-- ══ TOPBAR ══════════════════════════════════════ -->
+<header class="topbar">
+
+  <div class="topbar-left">
+    <span class="topbar-logo">REHOBOT BOX</span>
+    <div class="topbar-sep"></div>
+  </div>
+
+  <nav class="topbar-nav">
+
+    <a href="{% url 'panel_admin' %}"
+       class="nav-tab {% if request.resolver_match.url_name == 'panel_admin' %}active{% endif %}">
+      Dashboard
+    </a>
+
+    <a href="{% url 'panel_admin_usuarios' %}"
+       class="nav-tab {% if request.resolver_match.url_name == 'panel_admin_usuarios' %}active{% endif %}">
+      Usuarios
+    </a>
+
+    <a href="{% url 'administrar_planes' %}"
+       class="nav-tab {% if request.resolver_match.url_name == 'administrar_planes' %}active{% endif %}">
+      Planes
+    </a>
+
+    <a href="{% url 'gestionar_admins' %}"
+       class="nav-tab {% if request.resolver_match.url_name == 'gestionar_admins' %}active{% endif %}">
+      Admins
+    </a>
+
+  </nav>
+    <a href="{% url 'logout' %}" class="btn-logout">
+      Salir
+    </a>
+
+  </div>
+
+</header>
+
+<!-- ══ MAIN ══════════════════════════════════════ -->
+<main class="main">
+
+  {% block content %}
+  {% endblock %}
+
+</main>
+
+</body>
+</html>

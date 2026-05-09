@@ -1,0 +1,254 @@
+{% extends 'gimnasio/base_admin.html' %}
+
+{% load static %}
+
+{% block title %}
+Gestionar Admins — REHOBOT BOX
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/gestionar_admins.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<!-- ══ HEADER ══════════════════════════════════════ -->
+<div class="page-top">
+
+  <div>
+    <p class="welcome-tag">Control de acceso</p>
+
+    <h1 class="welcome-title">
+      Gestionar <span>Administradores</span>
+    </h1>
+
+    <p class="welcome-sub">
+      Agrega o quita permisos de administrador a los usuarios registrados.
+    </p>
+  </div>
+
+  <a href="{% url 'panel_admin' %}" class="btn-volver">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+      <polyline points="15 18 9 12 15 6"/>
+    </svg>
+    Volver
+  </a>
+
+</div>
+
+<!-- ══ FORMULARIO AGREGAR ADMIN ═══════════════════ -->
+<div class="form-section">
+
+  <div class="form-section-title">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+    </svg>
+    Agregar administrador
+  </div>
+
+  <p class="form-section-desc">
+    El usuario debe haber iniciado sesión al menos una vez para aparecer en el sistema.
+  </p>
+
+  <form method="POST" class="add-form">
+
+    {% csrf_token %}
+
+    <input type="hidden" name="accion" value="agregar"/>
+
+    <div class="input-group">
+
+      <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+        <polyline points="22,6 12,13 2,6"/>
+      </svg>
+
+      <input
+        type="email"
+        name="email"
+        placeholder="correo@ejemplo.com"
+        required
+        autocomplete="off"
+      />
+
+      <button type="submit" class="btn-agregar">
+        + Agregar
+      </button>
+
+    </div>
+
+  </form>
+
+</div>
+
+<!-- ══ DOS COLUMNAS ═══════════════════════════════ -->
+<div class="dos-columnas">
+
+  <!-- ══ ADMINISTRADORES ══════════════════════════ -->
+  <div class="lista-section">
+
+    <div class="lista-header pink">
+
+      <div class="lista-header-left">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+
+        Administradores
+      </div>
+
+      <span class="lista-count">
+        {{ admins.count }}
+      </span>
+
+    </div>
+
+    <div class="lista-body">
+
+      {% for admin in admins %}
+
+      <div class="usuario-row">
+
+        <div class="usuario-avatar pink">
+          {{ admin.first_name|slice:":1"|upper|default:admin.email|slice:":1"|upper }}
+        </div>
+
+        <div class="usuario-info">
+
+          <div class="usuario-nombre">
+            {{ admin.get_full_name|default:"Sin nombre" }}
+          </div>
+
+          <div class="usuario-email">
+            {{ admin.email }}
+          </div>
+
+        </div>
+
+        {% if admin != request.user %}
+
+        <form method="POST" class="form-inline">
+
+          {% csrf_token %}
+
+          <input type="hidden" name="accion" value="quitar"/>
+
+          <input type="hidden" name="email" value="{{ admin.email }}"/>
+
+          <button type="submit" class="btn-quitar" title="Quitar admin">
+
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+              <polyline points="3 6 5 6 21 6"/>
+              <path d="M19 6l-1 14H6L5 6"/>
+              <path d="M10 11v6M14 11v6"/>
+            </svg>
+
+            Quitar
+
+          </button>
+
+        </form>
+
+        {% else %}
+
+        <span class="badge-tu">
+          Tú
+        </span>
+
+        {% endif %}
+
+      </div>
+
+      {% empty %}
+
+      <div class="lista-vacia">
+        No hay administradores registrados.
+      </div>
+
+      {% endfor %}
+
+    </div>
+
+  </div>
+
+  <!-- ══ CLIENTES ═════════════════════════════════ -->
+  <div class="lista-section">
+
+    <div class="lista-header cyan">
+
+      <div class="lista-header-left">
+
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+        </svg>
+
+        Clientes
+
+      </div>
+
+      <span class="lista-count">
+        {{ clientes.count }}
+      </span>
+
+    </div>
+
+    <div class="lista-body">
+
+      {% for cliente in clientes %}
+
+      <div class="usuario-row">
+
+        <div class="usuario-avatar cyan">
+          {{ cliente.first_name|slice:":1"|upper|default:cliente.email|slice:":1"|upper }}
+        </div>
+
+        <div class="usuario-info">
+
+          <div class="usuario-nombre">
+            {{ cliente.get_full_name|default:"Sin nombre" }}
+          </div>
+
+          <div class="usuario-email">
+            {{ cliente.email }}
+          </div>
+
+        </div>
+
+        <form method="POST" class="form-inline">
+
+          {% csrf_token %}
+
+          <input type="hidden" name="accion" value="agregar"/>
+
+          <input type="hidden" name="email" value="{{ cliente.email }}"/>
+
+          <button type="submit" class="btn-hacer-admin" title="Hacer admin">
+
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+
+            Hacer admin
+
+          </button>
+
+        </form>
+
+      </div>
+
+      {% empty %}
+
+      <div class="lista-vacia">
+        No hay clientes registrados.
+      </div>
+
+      {% endfor %}
+
+    </div>
+
+  </div>
+
+</div>
+
+{% endblock %}
