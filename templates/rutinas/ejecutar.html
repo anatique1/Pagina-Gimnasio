@@ -1,0 +1,349 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entrenando — {{ sesion.rutina.nombre_rutina }}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'css/ejecutar_rutina.css' %}">
+</head>
+<body>
+
+  <header class="exec-topbar">
+    <a href="{% url 'lista_rutinas' %}" class="exec-volver">
+      <i class="fa-solid fa-arrow-left"></i>
+    </a>
+    <span class="exec-titulo">{{ sesion.rutina.nombre_rutina|upper }}</span>
+    <span class="exec-progreso" id="progreso-texto">1 / {{ ejercicios|length }}</span>
+  </header>
+
+  <div class="exec-progress-bar">
+    <div class="exec-progress-fill" id="progress-fill" style="width: 0%"></div>
+  </div>
+
+  <main class="exec-main">
+
+    <!-- Stack de tarjetas -->
+    <div class="cards-stack">
+      {% for re in ejercicios %}
+      <div class="ejercicio-card oculta" 
+           data-index="{{ forloop.counter0 }}"
+           data-nombre="{{ re.id_ejercicio.nombreEjercicio }}"
+           data-rutina-ejercicio="{{ re.pk }}"
+           data-series="{{ re.series }}">
+
+        <div class="exec-media">
+          {% if re.id_ejercicio.video %}
+            <video autoplay loop muted playsinline>
+              <source src="{{ re.id_ejercicio.video.url }}" type="video/mp4">
+            </video>
+          {% elif re.id_ejercicio.imagen %}
+            <img src="{{ re.id_ejercicio.imagen.url }}" alt="{{ re.id_ejercicio.nombreEjercicio }}">
+          {% else %}
+            <div class="exec-media-vacio">
+              <i class="fa-solid fa-dumbbell"></i>
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="exec-info">
+          <p class="exec-grupo">{{ re.id_ejercicio.get_grupo_muscular_display }}</p>
+          <h2 class="exec-nombre">{{ re.id_ejercicio.nombreEjercicio }}</h2>
+
+          <div class="exec-meta">
+            <div class="exec-meta-item">
+              <span class="exec-meta-label">Series</span>
+              <span class="exec-meta-valor">{{ re.series }}x</span>
+            </div>
+            {% if re.modo == 'tiempo' %}
+            <div class="exec-meta-item">
+              <span class="exec-meta-label">Tiempo</span>
+              <span class="exec-meta-valor">{{ re.duracion }} {{ re.get_unidad_tiempo_display }}</span>
+            </div>
+            {% else %}
+            <div class="exec-meta-item">
+              <span class="exec-meta-label">Reps</span>
+              <span class="exec-meta-valor">{{ re.repeticiones }}</span>
+            </div>
+            {% endif %}
+          </div>
+
+          <!-- Serie actual -->
+          <div class="serie-actual-wrap">
+            <p class="serie-actual-label" id="serie-label-{{ forloop.counter0 }}">Serie 1 de {{ re.series }}</p>
+
+            <!-- Estado: antes de iniciar -->
+            <div class="serie-estado" id="estado-inicio-{{ forloop.counter0 }}">
+              <button class="btn-iniciar-serie" onclick="iniciarSerie({{ forloop.counter0 }})">
+                <i class="fa-solid fa-play"></i> Iniciar serie
+              </button>
+            </div>
+
+            <!-- Estado: en progreso -->
+            <div class="serie-estado" id="estado-progreso-{{ forloop.counter0 }}" style="display:none;">
+              <button class="btn-terminar-serie" onclick="terminarSerie({{ forloop.counter0 }}, {{ re.series }}, {{ re.pk }})">
+                <i class="fa-solid fa-stop"></i> Terminar serie
+              </button>
+            </div>
+
+            <!-- Estado: registrar reps/peso + descanso -->
+            <div class="serie-estado" id="estado-descanso-{{ forloop.counter0 }}" style="display:none;">
+              <div class="serie-registro">
+                <div class="serie-campo-wrap">
+                  <label>Reps realizadas</label>
+                  <input type="number" class="serie-input" id="reps-{{ forloop.counter0 }}" placeholder="{{ re.repeticiones }}" min="0">
+                </div>
+                <div class="serie-campo-wrap">
+                  <label>Peso (kg)</label>
+                  <input type="number" class="serie-input" id="peso-{{ forloop.counter0 }}" placeholder="0" min="0" step="0.5">
+                </div>
+              </div>
+
+              <div class="descanso-wrap">
+                <div class="descanso-info">
+                  <span class="descanso-label"><i class="fa-regular fa-clock"></i> Descanso</span>
+                  <span class="descanso-timer" id="timer-{{ forloop.counter0 }}">0:00</span>
+                </div>
+                <button class="btn-pausar" id="btn-pausar-{{ forloop.counter0 }}" onclick="pausarDescanso({{ forloop.counter0 }})">
+                  <i class="fa-solid fa-pause"></i>
+                </button>
+              </div>
+
+              <button class="btn-siguiente-serie" id="btn-sig-serie-{{ forloop.counter0 }}" onclick="siguienteSerie({{ forloop.counter0 }}, {{ re.series }}, {{ re.pk }})">
+                Siguiente serie <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+
+          </div>
+
+          <button class="exec-accion-btn notas-btn" onclick="abrirNotas({{ forloop.counter0 }})">
+            <i class="fa-regular fa-file-lines"></i> Notas
+          </button>
+        </div>
+
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Navegación -->
+    <div class="exec-nav">
+      <button class="btn-nav-circulo" id="btn-anterior" disabled>
+        <i class="fa-solid fa-arrow-left"></i>
+      </button>
+      <button class="btn-saltar" id="btn-saltar">
+        <i class="fa-solid fa-forward"></i> Saltar
+      </button>
+      <button class="btn-nav-circulo" id="btn-siguiente">
+        <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </div>
+
+    <!-- Pendientes -->
+    <div class="pendientes-banner" id="pendientes-banner">
+      <p class="pendientes-titulo"><i class="fa-solid fa-triangle-exclamation"></i> Ejercicios saltados</p>
+      <div id="pendientes-lista"></div>
+    </div>
+
+    <!-- Finalizar -->
+    <form method="POST" action="{% url 'finalizar_sesion' sesion.pk %}">
+      {% csrf_token %}
+      <button type="submit" class="btn-finalizar" id="btn-finalizar">
+        <i class="fa-solid fa-flag-checkered"></i> Finalizar entrenamiento
+      </button>
+    </form>
+
+  </main>
+
+  <!-- Modal Notas -->
+  <div class="modal-overlay" id="modal-notas">
+    <div class="modal-panel">
+      <p class="modal-titulo"><i class="fa-regular fa-file-lines"></i> Notas</p>
+      <textarea class="modal-input" id="input-notas" placeholder="Escribe tus notas aquí..."></textarea>
+      <button class="modal-btn-guardar" onclick="cerrarModal('modal-notas')">Guardar</button>
+    </div>
+  </div>
+
+  <!-- Modal Peso -->
+  <div class="modal-overlay" id="modal-peso">
+    <div class="modal-panel">
+      <p class="modal-titulo" id="modal-peso-titulo"><i class="fa-solid fa-dumbbell"></i> Registrar peso</p>
+      <div class="modal-peso-grid" id="modal-peso-grid"></div>
+      <button class="modal-btn-guardar" id="btn-guardar-peso">Guardar series</button>
+    </div>
+  </div>
+  <script>
+    const total = {{ejercicios|length}};
+    const sesionId = {{ sesion.pk }};
+    const csrfToken = '{{ csrf_token }}';
+
+    let cola = Array.from({length: total}, (_, i) => i);
+    let saltados = [];
+    let posicion = 0;
+
+    // estado de series por ejercicio
+    const serieActual = {};
+    const timerIntervals = {};
+    const timerSegundos = {};
+    const timerPausado = {};
+
+    const cards = document.querySelectorAll('.ejercicio-card');
+    const btnAnterior = document.getElementById('btn-anterior');
+    const btnSiguiente = document.getElementById('btn-siguiente');
+    const btnSaltar = document.getElementById('btn-saltar');
+    const btnFinalizar = document.getElementById('btn-finalizar');
+    const pendientesBanner = document.getElementById('pendientes-banner');
+    const pendientesLista = document.getElementById('pendientes-lista');
+    const progressFill = document.getElementById('progress-fill');
+    const progresoTexto = document.getElementById('progreso-texto');
+
+    // inicializa series en 1 para cada ejercicio
+    cards.forEach((card, i) => { serieActual[i] = 1; });
+
+    function mostrarEstado(idx, estado) {
+      ['inicio', 'progreso', 'descanso'].forEach(e => {
+        const el = document.getElementById(`estado-${e}-${idx}`);
+        if (el) el.style.display = e === estado ? '' : 'none';
+      });
+    }
+
+    function iniciarSerie(idx) {
+      mostrarEstado(idx, 'progreso');
+    }
+
+    function terminarSerie(idx, totalSeries, rutinaEjercicioId) {
+      mostrarEstado(idx, 'descanso');
+      iniciarTimer(idx);
+    }
+
+    function iniciarTimer(idx) {
+      if (timerIntervals[idx]) clearInterval(timerIntervals[idx]);
+      timerSegundos[idx] = 0;
+      timerPausado[idx] = false;
+      const timerEl = document.getElementById(`timer-${idx}`);
+      const btnPausar = document.getElementById(`btn-pausar-${idx}`);
+
+      timerIntervals[idx] = setInterval(() => {
+        if (!timerPausado[idx]) {
+          timerSegundos[idx]++;
+          const m = Math.floor(timerSegundos[idx] / 60);
+          const s = timerSegundos[idx] % 60;
+          timerEl.textContent = `${m}:${s.toString().padStart(2,'0')}`;
+        }
+      }, 1000);
+    }
+
+    function pausarDescanso(idx) {
+      timerPausado[idx] = !timerPausado[idx];
+      const btn = document.getElementById(`btn-pausar-${idx}`);
+      btn.innerHTML = timerPausado[idx] 
+        ? '<i class="fa-solid fa-play"></i>' 
+        : '<i class="fa-solid fa-pause"></i>';
+    }
+
+    function siguienteSerie(idx, totalSeries, rutinaEjercicioId) {
+      const reps = document.getElementById(`reps-${idx}`).value || 0;
+      const peso = document.getElementById(`peso-${idx}`).value || 0;
+      const descanso = timerSegundos[idx] || 0;
+
+      // guarda la serie
+      fetch("{% url 'guardar_serie' %}", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrfToken },
+        body: JSON.stringify({
+          sesion_id: sesionId,
+          rutina_ejercicio_id: rutinaEjercicioId,
+          numero_serie: serieActual[idx],
+          peso_kg: peso,
+          repeticiones: reps,
+          tiempo_descanso: descanso
+        })
+      });
+
+      // para el timer
+      if (timerIntervals[idx]) { clearInterval(timerIntervals[idx]); timerIntervals[idx] = null; }
+
+      serieActual[idx]++;
+
+      if (serieActual[idx] > totalSeries) {
+        // terminó todas las series → siguiente ejercicio
+        if (posicion < cola.length - 1) {
+          posicion++;
+          actualizarVista();
+        } else {
+          btnFinalizar.style.display = 'block';
+          btnSiguiente.style.display = 'none';
+          btnSaltar.style.display = 'none';
+        }
+      } else {
+        // siguiente serie del mismo ejercicio
+        document.getElementById(`serie-label-${idx}`).textContent = `Serie ${serieActual[idx]} de ${totalSeries}`;
+        document.getElementById(`reps-${idx}`).value = '';
+        document.getElementById(`peso-${idx}`).value = '';
+        mostrarEstado(idx, 'inicio');
+      }
+    }
+
+    function actualizarVista() {
+      const actual = cola[posicion];
+      const anterior = posicion > 0 ? cola[posicion - 1] : null;
+      const siguiente = posicion < cola.length - 1 ? cola[posicion + 1] : null;
+
+      cards.forEach((card, i) => {
+        card.classList.remove('activa', 'anterior', 'siguiente', 'oculta');
+        if (i === actual) card.classList.add('activa');
+        else if (i === anterior) card.classList.add('anterior');
+        else if (i === siguiente) card.classList.add('siguiente');
+        else card.classList.add('oculta');
+      });
+
+      const pct = (posicion / total) * 100;
+      progressFill.style.width = pct + '%';
+      progresoTexto.textContent = `${posicion + 1} / ${cola.length}`;
+
+      btnAnterior.disabled = posicion === 0;
+      const esUltimo = posicion === cola.length - 1;
+      btnSiguiente.style.display = esUltimo ? 'none' : '';
+      btnSaltar.style.display = esUltimo ? 'none' : '';
+      btnFinalizar.style.display = esUltimo && serieActual[actual] > parseInt(cards[actual].dataset.series) ? 'block' : 'none';
+
+      if (saltados.length > 0) {
+        pendientesBanner.style.display = 'block';
+        pendientesLista.innerHTML = saltados.map(i =>
+          `<div class="pendiente-item"><i class="fa-solid fa-circle-dot" style="color:var(--neon-pink);margin-right:6px;"></i>${cards[i].dataset.nombre}</div>`
+        ).join('');
+      } else {
+        pendientesBanner.style.display = 'none';
+      }
+    }
+
+    btnAnterior.addEventListener('click', () => { if (posicion > 0) { posicion--; actualizarVista(); } });
+    btnSiguiente.addEventListener('click', () => { if (posicion < cola.length - 1) { posicion++; actualizarVista(); } });
+
+    btnSaltar.addEventListener('click', () => {
+      const idx = cola[posicion];
+      saltados.push(idx);
+      cola.splice(posicion, 1);
+      cola.push(idx);
+      if (posicion >= cola.length) posicion = cola.length - 1;
+      actualizarVista();
+    });
+
+    function abrirModal(id) { document.getElementById(id).classList.add('abierto'); }
+    function cerrarModal(id) { document.getElementById(id).classList.remove('abierto'); }
+
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', function(e) {
+        if (e.target === this) cerrarModal(this.id);
+      });
+    });
+
+    function abrirNotas(idx) { abrirModal('modal-notas'); }
+
+    actualizarVista();
+
+  </script>
+
+</body>
+</html>
