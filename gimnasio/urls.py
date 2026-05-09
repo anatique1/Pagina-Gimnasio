@@ -14,4 +14,6 @@ urlpatterns = [
     path('panel_admin/planes/crear/', views.crear_planes, name='crear_planes'), 
     path('panel_admin/planes/<int:id_plan>/eliminar/', views.eliminarPlan, name='eliminarPlan'),
     path('inicio/', views.inicio, name='inicio'),
+    path('panel_admin/admins/', views.gestionar_admins, name='gestionar_admins'),
+    
 ]

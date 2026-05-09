@@ -1,0 +1,268 @@
+/* =========================================
+   ARCHIVO:
+   static/css/gestionar_admins.css
+========================================= */
+
+/* ══ PAGE TOP ═══════════════════════════════════ */
+.page-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:20px;
+  margin-bottom:32px;
+}
+
+/* ══ BOTÓN VOLVER ═══════════════════════════════ */
+.btn-volver{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 18px;
+  border-radius:50px;
+  border:1px solid rgba(255,255,255,0.08);
+  background:rgba(255,255,255,0.03);
+  color:var(--text-primary);
+  text-decoration:none;
+  font-size:0.75rem;
+  font-weight:700;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  transition:0.25s;
+}
+
+.btn-volver:hover{
+  background:rgba(255,255,255,0.06);
+  border-color:rgba(0,212,255,0.3);
+  color:var(--neon-cyan);
+}
+
+/* ══ FORM SECTION ═══════════════════════════════ */
+.form-section{
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:28px;
+  margin-bottom:32px;
+}
+
+.form-section-title{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:0.95rem;
+  font-weight:700;
+  margin-bottom:10px;
+}
+
+.form-section-desc{
+  font-size:0.82rem;
+  color:var(--text-muted);
+  margin-bottom:22px;
+}
+
+/* ══ INPUT GROUP ════════════════════════════════ */
+.input-group{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.input-icon{
+  position:absolute;
+  left:16px;
+  width:18px;
+  height:18px;
+}
+
+.input-group input{
+  flex:1;
+  height:52px;
+  border-radius:14px;
+  border:1px solid var(--border);
+  background:#13131f;
+  padding:0 18px 0 48px;
+  color:white;
+  outline:none;
+}
+
+.input-group input:focus{
+  border-color:rgba(233,30,140,0.35);
+}
+
+.btn-agregar{
+  height:52px;
+  padding:0 22px;
+  border:none;
+  border-radius:14px;
+  background:linear-gradient(
+    135deg,
+    var(--neon-pink),
+    var(--neon-purple)
+  );
+  color:white;
+  font-weight:700;
+  cursor:pointer;
+}
+
+/* ══ DOS COLUMNAS ═══════════════════════════════ */
+.dos-columnas{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:24px;
+}
+
+/* ══ LISTA SECTION ══════════════════════════════ */
+.lista-section{
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  overflow:hidden;
+}
+
+.lista-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:18px 22px;
+  border-bottom:1px solid var(--border);
+}
+
+.lista-header-left{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:0.85rem;
+  font-weight:700;
+}
+
+.lista-header.pink{
+  background:rgba(233,30,140,0.06);
+}
+
+.lista-header.cyan{
+  background:rgba(0,212,255,0.05);
+}
+
+.lista-count{
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.06);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:0.72rem;
+  font-weight:700;
+}
+
+.lista-body{
+  padding:10px;
+}
+
+/* ══ USUARIO ROW ════════════════════════════════ */
+.usuario-row{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:14px;
+  border-radius:14px;
+  transition:0.25s;
+}
+
+.usuario-row:hover{
+  background:rgba(255,255,255,0.03);
+}
+
+/* ══ AVATAR ═════════════════════════════════════ */
+.usuario-avatar{
+  width:46px;
+  height:46px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+}
+
+.usuario-avatar.pink{
+  background:rgba(233,30,140,0.15);
+  color:var(--neon-pink);
+}
+
+.usuario-avatar.cyan{
+  background:rgba(0,212,255,0.12);
+  color:var(--neon-cyan);
+}
+
+/* ══ INFO ═══════════════════════════════════════ */
+.usuario-info{
+  flex:1;
+}
+
+.usuario-nombre{
+  font-size:0.9rem;
+  font-weight:600;
+}
+
+.usuario-email{
+  font-size:0.76rem;
+  color:var(--text-muted);
+}
+
+/* ══ BOTONES ════════════════════════════════════ */
+.btn-quitar,
+.btn-hacer-admin{
+  height:40px;
+  padding:0 16px;
+  border-radius:12px;
+  font-size:0.72rem;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.btn-quitar{
+  border:1px solid rgba(255,107,107,0.25);
+  background:rgba(255,107,107,0.08);
+  color:#ff7b7b;
+}
+
+.btn-hacer-admin{
+  border:1px solid rgba(0,212,255,0.25);
+  background:rgba(0,212,255,0.08);
+  color:var(--neon-cyan);
+}
+
+.badge-tu{
+  padding:8px 14px;
+  border-radius:50px;
+  background:rgba(124,58,237,0.12);
+  color:#c084fc;
+  font-size:0.68rem;
+  font-weight:700;
+}
+
+/* ══ RESPONSIVE ═════════════════════════════════ */
+@media(max-width:950px){
+
+  .dos-columnas{
+    grid-template-columns:1fr;
+  }
+
+}
+
+@media(max-width:768px){
+
+  .page-top{
+    flex-direction:column;
+  }
+
+  .input-group{
+    flex-direction:column;
+  }
+
+  .btn-agregar{
+    width:100%;
+  }
+
+}
