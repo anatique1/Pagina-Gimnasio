@@ -160,7 +160,7 @@
 
 
 <script>
-const POR_PAGINA = 10;
+const POR_PAGINA = 3;
 const buscador = document.getElementById('buscador-ejercicios');
 const dropdown = document.getElementById('dropdown-resultados');
 const todasLasFilas = [...document.querySelectorAll('.ejercicio-fila')];
@@ -260,7 +260,7 @@ function inicializarGrupo(body) {
   btnVerMas.addEventListener('click', () => {
     mostrados += POR_PAGINA;
     actualizar();
-  });
+  });Ñ
 
   actualizar();
 }

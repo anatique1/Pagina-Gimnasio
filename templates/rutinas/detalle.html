@@ -53,7 +53,7 @@
     <div class="detalle-header">
       <h2 class="detalle-titulo">{{ rutina.nombre_rutina|upper }}</h2>
       <div class="detalle-acciones">
-        <a href="{% url 'editar_rutina' rutina.pk %}" class="btn-editar-detalle">Editar</a>
+       <a href="{% url 'iniciar_entrenamiento' rutina.pk %}" class="btn-empezar-detalle">▶ Empezar</a>
         <a href="{% url 'lista_rutinas' %}" class="btn-volver">← Volver</a>
       </div>
     </div>

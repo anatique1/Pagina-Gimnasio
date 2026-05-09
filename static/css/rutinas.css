@@ -253,10 +253,11 @@ body {
 }
 
 .rutina-card-nombre {
-  font-size: 1.1rem;
-  font-weight: 700;
+  font-size: 1.25rem;
+  font-weight: 800;
   color: var(--text-primary);
-  margin-bottom: 10px;
+  margin-bottom: 12px;
+  letter-spacing: -0.5px;
 }
 
 .rutina-meta {
@@ -282,11 +283,11 @@ body {
   border-top: 1px solid var(--border);
 }
 
-.btn-editar {
-  flex: 1;
+.btn-empezar {
+  flex: 1.5;
   text-align: center;
-  padding: 9px;
-  border-radius: 50px;
+  padding: 10px;
+  border-radius: 15px;
   border: 1px solid var(--neon-cyan);
   color: var(--neon-cyan);
   text-decoration: none;
@@ -297,27 +298,51 @@ body {
   transition: 0.3s;
 }
 
-.btn-editar:hover {
+.btn-empezar:hover {
   background: rgba(0,212,255,0.1);
 }
+.btn-eliminar-icon {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: transparent;
+  border: 1px solid var(--text-muted);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
+}
 
-.btn-eliminar {
+.btn-eliminar-icon:hover {
+  background: rgba(233,30,140,0.15);
+  box-shadow: 0 0 10px rgba(233,30,140,0.3);
+  color: var(--text-primary);
+}
+.btn-editar {
   flex: 1;
-  padding: 9px;
-  border-radius: 50px;
+  padding: 10px;
+  border-radius: 15px;
   border: 1px solid var(--neon-pink);
   background: transparent;
   color: var(--neon-pink);
   font-size: 0.75rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 1px;
   text-transform: uppercase;
+  text-decoration: none; 
+  text-align: center;
   cursor: pointer;
   transition: 0.3s;
   width: 100%;
 }
 
-.btn-eliminar:hover {
+.btn-editar:hover {
   background: rgba(233,30,140,0.1);
 }
 
@@ -693,7 +718,7 @@ body {
   color: var(--text-primary);
 }
 
-.btn-editar-detalle {
+.btn-empezar-detalle {
   padding: 10px 22px;
   border-radius: 50px;
   border: 1px solid var(--neon-cyan);
@@ -855,7 +880,8 @@ body {
 .dropdown-resultados {
   position: absolute;
   top: 100%;
-  left: 0; right: 0;
+  left: 0;
+  right: 0;
   background: var(--bg-card);
   border: 1px solid var(--neon-cyan);
   border-radius: 10px;
@@ -863,6 +889,8 @@ body {
   overflow-y: auto;
   z-index: 100;
   margin-top: 4px;
+  width: 100%;  
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
 }
 
 .dropdown-item {
