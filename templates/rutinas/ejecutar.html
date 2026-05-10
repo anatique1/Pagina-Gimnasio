@@ -154,6 +154,34 @@
       </button>
     </form>
 
+    <!-- Pantalla completado -->
+    <div class="completado-overlay" id="completado-overlay" style="display:none;">
+      <div class="completado-card">
+        <div class="completado-icon">🏆</div>
+        <h2 class="completado-titulo">¡Entrenamiento completado!</h2>
+        <p class="completado-sub">{{ sesion.rutina.nombre_rutina }}</p>
+        <div class="completado-stats">
+          <div class="completado-stat">
+            <span class="completado-stat-valor" id="comp-ejercicios">0</span>
+            <span class="completado-stat-label">Ejercicios</span>
+          </div>
+          <div class="completado-stat">
+            <span class="completado-stat-valor" id="comp-series">0</span>
+            <span class="completado-stat-label">Series</span>
+          </div>
+        </div>
+        <form method="POST" action="{% url 'finalizar_sesion' sesion.pk %}">
+          {% csrf_token %}
+          <button type="submit" class="completado-btn">
+            <i class="fa-solid fa-flag-checkered"></i> Ver mi historial
+          </button>
+        </form>
+        <a href="{% url 'lista_rutinas' %}" class="completado-btn-secundario">
+          Volver a rutinas
+        </a>
+      </div>
+    </div>
+
   </main>
 
   <!-- Modal Notas -->
@@ -178,15 +206,22 @@
     const sesionId = {{ sesion.pk }};
     const csrfToken = '{{ csrf_token }}';
 
+    // ── localStorage primero ──
+    const STORAGE_KEY = `sesion_${sesionId}`;
+
     let cola = Array.from({length: total}, (_, i) => i);
     let saltados = [];
     let posicion = 0;
-
-    // estado de series por ejercicio
     const serieActual = {};
     const timerIntervals = {};
     const timerSegundos = {};
     const timerPausado = {};
+
+    // ── restaurar progreso guardado ──
+    const progGuardado = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    if (progGuardado.posicion !== undefined) posicion = progGuardado.posicion;
+    if (progGuardado.saltados) saltados = progGuardado.saltados;
+    if (progGuardado.cola) cola = progGuardado.cola;
 
     const cards = document.querySelectorAll('.ejercicio-card');
     const btnAnterior = document.getElementById('btn-anterior');
@@ -198,8 +233,19 @@
     const progressFill = document.getElementById('progress-fill');
     const progresoTexto = document.getElementById('progreso-texto');
 
-    // inicializa series en 1 para cada ejercicio
+    // inicializa series
     cards.forEach((card, i) => { serieActual[i] = 1; });
+    if (progGuardado.serieActual) Object.assign(serieActual, progGuardado.serieActual);
+
+    // ── funciones ──
+    function guardarProgreso() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        posicion,
+        serieActual: {...serieActual},
+        saltados: [...saltados],
+        cola: [...cola]
+      }));
+    }
 
     function mostrarEstado(idx, estado) {
       ['inicio', 'progreso', 'descanso'].forEach(e => {
@@ -222,7 +268,6 @@
       timerSegundos[idx] = 0;
       timerPausado[idx] = false;
       const timerEl = document.getElementById(`timer-${idx}`);
-      const btnPausar = document.getElementById(`btn-pausar-${idx}`);
 
       timerIntervals[idx] = setInterval(() => {
         if (!timerPausado[idx]) {
@@ -237,8 +282,8 @@
     function pausarDescanso(idx) {
       timerPausado[idx] = !timerPausado[idx];
       const btn = document.getElementById(`btn-pausar-${idx}`);
-      btn.innerHTML = timerPausado[idx] 
-        ? '<i class="fa-solid fa-play"></i>' 
+      btn.innerHTML = timerPausado[idx]
+        ? '<i class="fa-solid fa-play"></i>'
         : '<i class="fa-solid fa-pause"></i>';
     }
 
@@ -247,7 +292,6 @@
       const peso = document.getElementById(`peso-${idx}`).value || 0;
       const descanso = timerSegundos[idx] || 0;
 
-      // guarda la serie
       fetch("{% url 'guardar_serie' %}", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrfToken },
@@ -261,28 +305,33 @@
         })
       });
 
-      // para el timer
       if (timerIntervals[idx]) { clearInterval(timerIntervals[idx]); timerIntervals[idx] = null; }
 
       serieActual[idx]++;
+      guardarProgreso();
 
       if (serieActual[idx] > totalSeries) {
-        // terminó todas las series → siguiente ejercicio
         if (posicion < cola.length - 1) {
           posicion++;
           actualizarVista();
         } else {
-          btnFinalizar.style.display = 'block';
-          btnSiguiente.style.display = 'none';
-          btnSaltar.style.display = 'none';
+          mostrarCompletado();
         }
       } else {
-        // siguiente serie del mismo ejercicio
         document.getElementById(`serie-label-${idx}`).textContent = `Serie ${serieActual[idx]} de ${totalSeries}`;
         document.getElementById(`reps-${idx}`).value = '';
         document.getElementById(`peso-${idx}`).value = '';
         mostrarEstado(idx, 'inicio');
       }
+    }
+
+    function mostrarCompletado() {
+      const overlay = document.getElementById('completado-overlay');
+      overlay.style.display = 'flex';
+      document.getElementById('comp-ejercicios').textContent = total;
+      const totalSeriesGuardadas = Object.values(serieActual).reduce((acc, s) => acc + s - 1, 0);
+      document.getElementById('comp-series').textContent = totalSeriesGuardadas;
+      localStorage.removeItem(STORAGE_KEY);
     }
 
     function actualizarVista() {
@@ -306,7 +355,6 @@
       const esUltimo = posicion === cola.length - 1;
       btnSiguiente.style.display = esUltimo ? 'none' : '';
       btnSaltar.style.display = esUltimo ? 'none' : '';
-      btnFinalizar.style.display = esUltimo && serieActual[actual] > parseInt(cards[actual].dataset.series) ? 'block' : 'none';
 
       if (saltados.length > 0) {
         pendientesBanner.style.display = 'block';
@@ -316,6 +364,8 @@
       } else {
         pendientesBanner.style.display = 'none';
       }
+
+      guardarProgreso();
     }
 
     btnAnterior.addEventListener('click', () => { if (posicion > 0) { posicion--; actualizarVista(); } });
@@ -342,8 +392,6 @@
     function abrirNotas(idx) { abrirModal('modal-notas'); }
 
     actualizarVista();
-
   </script>
-
 </body>
 </html>

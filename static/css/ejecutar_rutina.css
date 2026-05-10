@@ -615,6 +615,7 @@ body {
   margin-top: 8px;
 }
 
+
 /* ══ FINALIZAR ═══════════════════════════════ */
 .btn-finalizar {
   width: 100%; max-width: 360px;
@@ -633,6 +634,9 @@ body {
   transition: 0.3s;
 }
 .btn-finalizar:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,212,255,0.35); }
+
+
+
 
 /* ══ RESPONSIVE ══════════════════════════════ */
 @media (max-width: 400px) {

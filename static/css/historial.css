@@ -1,0 +1,498 @@
+/* ══ VARIABLES ═══════════════════════════════ */
+:root {
+  --bg: #0f0f1a;
+  --bg-card: #1a1a2e;
+  --bg-card-hover: #22223a;
+  --neon-pink: #e91e8c;
+  --neon-cyan: #00d4ff;
+  --neon-purple: #7c3aed;
+  --text-primary: #ffffff;
+  --text-muted: #8888aa;
+  --border: rgba(255,255,255,0.07);
+  --radius: 16px;
+  --font: 'Poppins', sans-serif;
+  --topbar-h: 60px;
+  --sidebar-w: 260px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text-primary);
+  min-height: 100vh;
+}
+
+a { text-decoration: none; color: inherit; }
+
+/* ─── barra lateral ──────────────────────────────────────── */
+
+/* ─── oculta la barra lateral ──────────────── */
+#sidebar-toggle { display: none; }
+
+/* ─── oculta la pantalla cuando se abre la barra ──────────────────────────────────────── */
+.overlay {
+  position: fixed; inset: 0; z-index: 90;
+  background: rgba(5,5,15,.7);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition);
+}
+#sidebar-toggle:checked ~ .overlay {
+  opacity: 1;
+  pointer-events: all;/* ─ pone el cursor con la manito abierta ─ */
+
+}
+
+/* ─── barra lateral ──────────────────────────────────────── */
+.sidebar {
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  width: 280px;
+  z-index: 100; /* ─── para que este encima de todo(capas) ─ */
+  background: var(--bg-card);
+  border-right: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  padding: 32px 20px 28px;
+  transform: translateX(-100%);
+  transition: transform var(--transition);
+  overflow: hidden;
+}
+
+/* cuando se abre la barra muestra una linea bonita al lado */
+.sidebar::after {
+  content: '';
+  position: absolute; top: 0; right: 0; bottom: 0; width: 1px;
+  background: linear-gradient(to bottom, transparent, var(--neon-cyan), transparent);
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+#sidebar-toggle:checked ~ .sidebar        { transform: translateX(0); }
+#sidebar-toggle:checked ~ .sidebar::after { opacity: 1; }
+
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+.logo-mark img {
+    display: block;
+    height: 40px;
+}
+.logo-text {
+    font-family: var(--font-body);
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    background: linear-gradient(to right, var(--neon-cyan), var(--neon-pink));
+    /* para que se vea la letra con colores degradados */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* las cosas dentro de la barra lateral */
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+/* cada boton dentro de la barra lateral menos inicio */
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 16px;
+  border-radius: 12px;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--text-muted);
+  /* transicion caundo se pase el mause por encima*/
+  transition: background var(--transition), color var(--transition), transform .2s;
+
+}
+.nav-link:hover {
+  background: var(--bg-card-hover);
+  color: var(--text-primary);
+  transform: translateX(4px);
+}
+/* el apartado de inicio que va a ser azul por que ya estamos en inicio */
+.nav-link.active {
+  background: linear-gradient(90deg, rgba(0,212,255,.15), rgba(0,212,255,.04));
+  color: var(--neon-cyan);
+  border-left: 3px solid var(--neon-cyan);
+}
+
+.nav-link .nav-icon {
+  font-size: 17px;
+  flex-shrink: 0;
+  width: 22px;
+  text-align: center;
+}
+
+.nav-link.logout {
+     color: var(--neon-pink);
+     }
+
+/* ─── TOPBAR ───────────────────────────────────────── */
+.topbar {
+  position: fixed;
+  top: 0; left: 0; right: 0; z-index: 80;
+  height: 64px;
+  background: rgba(5,5,15,.88);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 16px;
+}
+/* boton que abre la barra lateral */
+.menu-btn {
+  width: 42px; height: 42px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: background var(--transition);
+  flex-shrink: 0;
+}
+.menu-btn:hover { background: var(--bg-card-hover); }
+.menu-btn span {
+  display: block;
+  width: 20px; height: 2px;
+  background: var(--text-primary);
+  border-radius: 2px;
+  transition: transform var(--transition), opacity var(--transition), width var(--transition);
+}
+
+
+.topbar-title {
+  font-family: var(--font-display);   
+  font-size: 20px; 
+  letter-spacing: 8px;
+  color: var(--text-primary);
+  text-shadow:
+        0 0 60px rgba(233, 30, 140, 0.4),  
+        0 0 120px rgba(233, 30, 140, 0.2); 
+}
+/* ══ MAIN ════════════════════════════════════ */
+.main {
+  margin-top: calc(var(--topbar-h) + 32px);
+  padding: 0 20px 60px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: calc(var(--topbar-h) + 32px);
+}
+
+/* ══ STATS ═══════════════════════════════════ */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+}
+
+.stat-icon { font-size: 1.4rem; margin-bottom: 4px; }
+.stat-valor { font-size: 1.6rem; font-weight: 700; color: var(--text-primary); }
+.stat-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); }
+
+/* ══ CALENDARIO ══════════════════════════════ */
+.calendario-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 28px;
+  position: relative;
+  overflow: hidden;
+}
+
+.calendario-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--neon-pink), var(--neon-purple));
+}
+
+.cal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.cal-titulo {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+.cal-nav-btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted);
+  transition: 0.3s;
+}
+.cal-nav-btn:hover { border-color: var(--neon-cyan); color: var(--neon-cyan); }
+
+.cal-dias-semana {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  margin-bottom: 8px;
+}
+.cal-dias-semana span {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 6px 0;
+}
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.cal-dia {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  position: relative;
+  transition: 0.2s;
+  gap: 2px;
+}
+
+.cal-dia.vacio { background: transparent; }
+
+.cal-dia.hoy {
+  border: 1px solid rgba(0,212,255,0.4);
+  color: var(--neon-cyan);
+  font-weight: 700;
+}
+
+.cal-dia.entrenado {
+  background: rgba(233,30,140,0.15);
+  border: 1px solid rgba(233,30,140,0.3);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-weight: 700;
+}
+.cal-dia.entrenado:hover {
+  background: rgba(233,30,140,0.25);
+  transform: scale(1.05);
+}
+
+.cal-dia.hoy.entrenado {
+  background: rgba(233,30,140,0.2);
+  border-color: var(--neon-pink);
+}
+
+.cal-dia-num { font-size: 0.85rem; line-height: 1; }
+
+.cal-punto {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--neon-pink);
+}
+
+/* ══ HISTORIAL LISTA ═════════════════════════ */
+.historial-titulo {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+.sesion-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 12px;
+  transition: border-color 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.sesion-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+}
+
+.sesion-card:hover { border-color: rgba(0,212,255,0.2); }
+
+.sesion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.sesion-rutina {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.sesion-fecha {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sesion-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-end;
+}
+
+.sesion-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.sesion-badge-ok {
+  background: rgba(0,212,255,0.08);
+  border-color: rgba(0,212,255,0.2);
+  color: var(--neon-cyan);
+}
+
+/* ══ DETALLE SESIÓN ══════════════════════════ */
+.sesion-detalle summary {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 0;
+  transition: color 0.2s;
+}
+.sesion-detalle summary::after { content: ' ▼'; font-size: 0.6rem; }
+.sesion-detalle[open] summary::after { content: ' ▲'; }
+.sesion-detalle summary:hover { color: var(--neon-cyan); }
+.sesion-detalle summary::-webkit-details-marker { display: none; }
+
+.sesion-ejercicios { padding-top: 12px; display: flex; flex-direction: column; gap: 10px; }
+
+.sesion-ejercicio-item {
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+
+.sesion-ejercicio-nombre {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.sesion-series-lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.sesion-serie-badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: rgba(124,58,237,0.15);
+  border: 1px solid rgba(124,58,237,0.3);
+  color: #c084fc;
+}
+
+/* ══ EMPTY ═══════════════════════════════════ */
+.empty-historial {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.empty-historial i { font-size: 3rem; opacity: 0.3; }
+.empty-historial p { font-size: 0.9rem; }
+
+.btn-ir-rutinas {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 22px;
+  border-radius: 50px;
+  background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-top: 8px;
+  transition: 0.3s;
+}
+.btn-ir-rutinas:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(233,30,140,0.35); }
+
+/* ══ RESPONSIVE ══════════════════════════════ */
+@media (max-width: 600px) {
+  .stats-grid { grid-template-columns: repeat(3, 1fr); }
+  .main { padding: 0 16px 60px; }
+  .sesion-header { flex-direction: column; }
+  .sesion-badges { flex-direction: row; align-items: center; }
+}

@@ -1,0 +1,189 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Historial — Rehobotbox Gym</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'css/historial.css' %}">
+</head>
+<body>
+
+  <input type="checkbox" id="sidebar-toggle">
+  <label for="sidebar-toggle" class="overlay"></label>
+
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark"><img src="{% static 'img/logo.png' %}"></div>
+      <span class="logo-text">REHOBOT BOX</span>
+    </div>
+    <div class="sidebar-nav">
+      <a href="{% url 'inicio' %}" class="nav-link">
+        <span class="nav-icon"><i class="fa-solid fa-house"></i></span> Inicio
+      </a>
+      <a href="{% url 'lista_rutinas' %}" class="nav-link">
+        <span class="nav-icon"><i class="fa-solid fa-dumbbell"></i></span> Mis Rutinas
+      </a>
+      <a href="{% url 'historial' %}" class="nav-link active">
+        <span class="nav-icon"><i class="fa-solid fa-calendar-days"></i></span> Historial
+      </a>
+      <a href="{% url 'planes' %}" class="nav-link">
+        <span class="nav-icon"><i class="fa-solid fa-bolt"></i></span> Planes
+      </a>
+      <a href="{% url 'logout' %}" class="nav-link logout">
+        <span class="nav-icon"><i class="fa-solid fa-right-from-bracket"></i></span> Cerrar Sesión
+      </a>
+    </div>
+  </nav>
+
+  <header class="topbar">
+    <label for="sidebar-toggle" class="menu-btn">
+      <span></span><span></span><span></span>
+    </label>
+    <span class="topbar-title">HISTORIAL</span>
+  </header>
+
+  <main class="main">
+
+    <!-- Estadísticas del mes -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <i class="fa-solid fa-fire stat-icon" style="color:var(--neon-pink)"></i>
+        <span class="stat-valor">{{ total_sesiones }}</span>
+        <span class="stat-label">Sesiones</span>
+      </div>
+      <div class="stat-card">
+        <i class="fa-solid fa-dumbbell stat-icon" style="color:var(--neon-cyan)"></i>
+        <span class="stat-valor">{{ total_series }}</span>
+        <span class="stat-label">Series totales</span>
+      </div>
+      <div class="stat-card">
+        <i class="fa-regular fa-clock stat-icon" style="color:var(--neon-purple)"></i>
+        <span class="stat-valor">{{ total_minutos }}</span>
+        <span class="stat-label">Minutos</span>
+      </div>
+    </div>
+
+    <!-- Calendario -->
+    <div class="calendario-card">
+
+      <!-- Navegación mes -->
+      <div class="cal-header">
+        <a href="?mes={{ mes_anterior.mes }}&año={{ mes_anterior.año }}" class="cal-nav-btn">
+          <i class="fa-solid fa-chevron-left"></i>
+        </a>
+        <h2 class="cal-titulo">{{ mes_nombre }} {{ año }}</h2>
+        <a href="?mes={{ mes_siguiente.mes }}&año={{ mes_siguiente.año }}" class="cal-nav-btn">
+          <i class="fa-solid fa-chevron-right"></i>
+        </a>
+      </div>
+
+      <!-- Días de la semana -->
+      <div class="cal-dias-semana">
+        <span>Lun</span><span>Mar</span><span>Mié</span>
+        <span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span>
+      </div>
+
+      <!-- Semanas -->
+      <div class="cal-grid">
+        {% for semana in semanas %}
+          {% for dia in semana %}
+            {% if dia == 0 %}
+              <div class="cal-dia vacio"></div>
+            {% else %}
+              <div class="cal-dia 
+                {% if dia in dias_entrenados %}entrenado{% endif %}
+                {% if dia == hoy.day and mes == hoy.month and año == hoy.year %}hoy{% endif %}"
+                {% if dia in dias_entrenados %}onclick="verSesion({{ dia }})"{% endif %}>
+                <span class="cal-dia-num">{{ dia }}</span>
+                {% if dia in dias_entrenados %}
+                  <span class="cal-punto"></span>
+                {% endif %}
+              </div>
+            {% endif %}
+          {% endfor %}
+        {% endfor %}
+      </div>
+
+    </div>
+
+    <!-- Historial de sesiones -->
+    <div class="historial-lista">
+      <h3 class="historial-titulo">Sesiones recientes</h3>
+
+      {% for sesion in sesiones %}
+      <div class="sesion-card" id="sesion-{{ sesion.fecha_inicio.day }}-{{ sesion.fecha_inicio.month }}">
+        <div class="sesion-header">
+          <div>
+            <p class="sesion-rutina">{{ sesion.rutina.nombre_rutina }}</p>
+            <p class="sesion-fecha">
+              <i class="fa-regular fa-calendar"></i>
+              {{ sesion.fecha_inicio|date:"d/m/Y" }} — {{ sesion.fecha_inicio|date:"H:i" }}
+            </p>
+          </div>
+          <div class="sesion-badges">
+            {% if sesion.duracion_real %}
+            <span class="sesion-badge">
+              <i class="fa-regular fa-clock"></i> {{ sesion.duracion_real }} min
+            </span>
+            {% endif %}
+            <span class="sesion-badge sesion-badge-ok">
+              <i class="fa-solid fa-check"></i> Completada
+            </span>
+          </div>
+        </div>
+
+        <!-- Ejercicios de la sesión -->
+        <details class="sesion-detalle">
+          <summary>Ver ejercicios</summary>
+          <div class="sesion-ejercicios">
+            {% regroup sesion.series.all by rutina_ejercicio as grupos %}
+            {% for grupo in grupos %}
+            <div class="sesion-ejercicio-item">
+              <p class="sesion-ejercicio-nombre">
+                {{ grupo.grouper.id_ejercicio.nombreEjercicio }}
+              </p>
+              <div class="sesion-series-lista">
+                {% for serie in grupo.list %}
+                <span class="sesion-serie-badge">
+                  S{{ serie.numero_serie }}: 
+                  {% if serie.peso_kg > 0 %}{{ serie.peso_kg }}kg × {% endif %}
+                  {{ serie.repeticiones_realizadas }} reps
+                </span>
+                {% endfor %}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </details>
+
+      </div>
+      {% empty %}
+      <div class="empty-historial">
+        <i class="fa-solid fa-calendar-xmark"></i>
+        <p>No tienes sesiones registradas aún.</p>
+        <a href="{% url 'lista_rutinas' %}" class="btn-ir-rutinas">Ver mis rutinas</a>
+      </div>
+      {% endfor %}
+    </div>
+
+  </main>
+
+  <script>
+    function verSesion(dia) {
+      const mes = {{ mes }};
+      const año = {{ año }};
+      const id = `sesion-${dia}-${mes}`;
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.style.borderColor = 'var(--neon-cyan)';
+        setTimeout(() => { el.style.borderColor = ''; }, 2000);
+      }
+    }
+  </script>
+
+</body>
+</html>

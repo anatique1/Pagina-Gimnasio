@@ -5,6 +5,8 @@ from django.utils import timezone
 from django.http import JsonResponse
 from .models import Ejercicio, RutinaEjercicio, Rutina, SesionEntrenamiento, SerieSesion
 import json
+from datetime import date
+import calendar as cal
 
 @login_required
 def lista_rutinas(request):
@@ -145,21 +147,78 @@ def guardar_serie(request):
 
 @login_required
 def finalizar_sesion(request, pk):
-    if request.method == 'POST':
-        sesion = get_object_or_404(SesionEntrenamiento, pk=pk, usuario=request.user)
-        sesion.fecha_fin = timezone.now()
-        sesion.completada = True
-        sesion.save()
-        sesion.calcular_duracion()
-        return redirect('historial')
-    return redirect('ejecutar_rutina', pk=pk)
-
+    sesion = get_object_or_404(SesionEntrenamiento, pk=pk, usuario=request.user)
+    sesion.fecha_fin = timezone.now()
+    sesion.completada = True
+    sesion.save()
+    sesion.calcular_duracion()
+    return redirect('inicio')
 
 @login_required
 def historial(request):
-    sesiones = SesionEntrenamiento.objects.filter(
-        usuario=request.user
+    hoy = date.today()
+    mes = int(request.GET.get('mes', hoy.month))
+    año = int(request.GET.get('anio', hoy.year))
+
+    # mes anterior y siguiente para navegación
+    if mes == 1:
+        mes_anterior = {'mes': 12, 'anio': año - 1}
+    else:
+        mes_anterior = {'mes': mes - 1, 'anio': año}
+
+    if mes == 12:
+        mes_siguiente = {'mes': 1, 'anio': año + 1}
+    else:
+        mes_siguiente = {'mes': mes + 1, 'anio': año}
+
+    # sesiones del mes actual
+    sesiones_mes = SesionEntrenamiento.objects.filter(
+        usuario=request.user,
+        fecha_inicio__year=año,
+        fecha_inicio__month=mes,
+        completada=True
     ).prefetch_related('series__rutina_ejercicio__id_ejercicio')
+
+    # días que entrenó
+    dias_entrenados = set(s.fecha_inicio.day for s in sesiones_mes)
+
+    # sesiones por día para el detalle
+    sesiones_por_dia = {}
+    for s in sesiones_mes:
+        dia = s.fecha_inicio.day
+        if dia not in sesiones_por_dia:
+            sesiones_por_dia[dia] = []
+        sesiones_por_dia[dia].append(s)
+
+    # construir semanas del calendario
+    semanas = cal.monthcalendar(año, mes)
+
+    # estadísticas del mes
+    total_sesiones = sesiones_mes.count()
+    total_series = sum(s.series.count() for s in sesiones_mes)
+    total_minutos = sum(s.duracion_real or 0 for s in sesiones_mes)
+
+    # todas las sesiones para el historial
+    todas_sesiones = SesionEntrenamiento.objects.filter(
+        usuario=request.user,
+        completada=True
+    ).prefetch_related('series__rutina_ejercicio__id_ejercicio').order_by('-fecha_inicio')
+
+    MESES = ['', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+             'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+
     return render(request, 'rutinas/historial.html', {
-        'sesiones': sesiones
+        'sesiones': todas_sesiones,
+        'semanas': semanas,
+        'mes': mes,
+        'año': año,
+        'mes_nombre': MESES[mes],
+        'dias_entrenados': dias_entrenados,
+        'sesiones_por_dia': sesiones_por_dia,
+        'mes_anterior': mes_anterior,
+        'mes_siguiente': mes_siguiente,
+        'hoy': hoy,
+        'total_sesiones': total_sesiones,
+        'total_series': total_series,
+        'total_minutos': total_minutos,
     })
